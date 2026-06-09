@@ -9,21 +9,98 @@ import Achievements from "@/components/Achievements";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
-export default function Home() {
+import { client } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
+import {
+  profileQuery,
+  experiencesQuery,
+  educationsQuery,
+  projectsQuery,
+  skillsQuery,
+  achievementsQuery,
+} from "@/sanity/lib/queries";
+
+// ISR (Incremental Static Regeneration) - Revalidate every 60 seconds
+export const revalidate = 60;
+
+export default async function Home() {
+  let profile = null;
+  let experiences = [];
+  let educations = [];
+  let projects = [];
+  let skills = [];
+  let achievements = [];
+
+  try {
+    profile = await client.fetch(profileQuery);
+    experiences = await client.fetch(experiencesQuery);
+    educations = await client.fetch(educationsQuery);
+    projects = await client.fetch(projectsQuery);
+    skills = await client.fetch(skillsQuery);
+    achievements = await client.fetch(achievementsQuery);
+  } catch (error) {
+    console.error("Failed to fetch Sanity data, using local static fallbacks:", error);
+  }
+
+  // Extract variables with type checking and default fallbacks
+  const name = profile?.name || undefined;
+  const title = profile?.title || undefined;
+  const bio1 = profile?.bio1 || undefined;
+  const bio2 = profile?.bio2 || undefined;
+  const resumeUrl = profile?.resumeUrl || undefined;
+  const stats = profile?.stats || undefined;
+  const email = profile?.email || undefined;
+  const linkedinUrl = profile?.linkedin || undefined;
+  const githubUrl = profile?.github || undefined;
+  const location = profile?.location || undefined;
+  const imageUrl = profile?.image ? urlFor(profile.image).url() : undefined;
+  const specialties = profile?.specialties || undefined;
+
   return (
     <>
-      <Navbar />
-      <main className="flex-1 w-full">
-        {/* Sections are ordered logically with proper pacing and margins */}
-        <Hero />
-        <About />
-        <Experience />
-        <Projects />
-        <Skills />
-        <Achievements />
-        <Contact />
+      <Navbar name={name} />
+      <main className="flex-1 w-full animate-fadeIn">
+        <Hero
+          name={name}
+          title={title}
+          bio1={bio1}
+          resumeUrl={resumeUrl}
+          githubUrl={githubUrl}
+          linkedinUrl={linkedinUrl}
+          imageUrl={imageUrl}
+        />
+        <About
+          bio1={bio1}
+          bio2={bio2}
+          stats={stats && stats.length > 0 ? stats : undefined}
+          specialties={specialties}
+        />
+        <Experience
+          workExperience={experiences && experiences.length > 0 ? experiences : undefined}
+          educationHistory={educations && educations.length > 0 ? educations : undefined}
+        />
+        <Projects
+          projects={projects && projects.length > 0 ? projects : undefined}
+        />
+        <Skills
+          skills={skills && skills.length > 0 ? skills : undefined}
+        />
+        <Achievements
+          achievements={achievements && achievements.length > 0 ? achievements : undefined}
+        />
+        <Contact
+          email={email}
+          linkedinUrl={linkedinUrl}
+          githubUrl={githubUrl}
+          location={location}
+        />
       </main>
-      <Footer />
+      <Footer
+        name={name}
+        email={email}
+        linkedinUrl={linkedinUrl}
+        githubUrl={githubUrl}
+      />
     </>
   );
 }

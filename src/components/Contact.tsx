@@ -4,36 +4,59 @@ import React from "react";
 import { Mail, Globe, MapPin } from "lucide-react";
 import { Github, Linkedin } from "@/components/BrandIcons";
 
-export default function Contact() {
+interface ContactProps {
+  email?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
+  portfolioUrl?: string;
+  location?: string;
+}
+
+export default function Contact({
+  email,
+  linkedinUrl,
+  githubUrl,
+  portfolioUrl = "#home",
+  location,
+}: ContactProps) {
+  if (!email) return null;
   const contactInfo = [
     {
       icon: <Mail className="text-indigo-600" size={24} />,
       label: "Email",
-      value: "abhiramsuresh.dev@gmail.com",
-      href: "mailto:abhiramsuresh.dev@gmail.com",
+      value: email,
+      href: `mailto:${email}`,
     },
-    {
-      icon: <Linkedin className="text-blue-600" size={24} />,
-      label: "LinkedIn",
-      value: "linkedin.com/in/abhiram-suresh",
-      href: "https://linkedin.com/in/abhiram-suresh",
-    },
-    {
-      icon: <Github className="text-slate-800" size={24} />,
-      label: "GitHub",
-      value: "github.com/AbhiramSuresh",
-      href: "https://github.com/AbhiramSuresh",
-    },
+    ...(linkedinUrl
+      ? [
+          {
+            icon: <Linkedin className="text-blue-600" size={24} />,
+            label: "LinkedIn",
+            value: linkedinUrl.replace(/^https?:\/\/(www\.)?/, ""),
+            href: linkedinUrl,
+          },
+        ]
+      : []),
+    ...(githubUrl
+      ? [
+          {
+            icon: <Github className="text-slate-800" size={24} />,
+            label: "GitHub",
+            value: githubUrl.replace(/^https?:\/\/(www\.)?/, ""),
+            href: githubUrl,
+          },
+        ]
+      : []),
     {
       icon: <Globe className="text-emerald-600" size={24} />,
       label: "Portfolio",
-      value: "abhiramsuresh.dev",
-      href: "#home",
+      value: portfolioUrl === "#home" ? "abhiramsuresh.dev" : portfolioUrl.replace(/^https?:\/\/(www\.)?/, ""),
+      href: portfolioUrl,
     },
     {
       icon: <MapPin className="text-rose-600" size={24} />,
       label: "Location",
-      value: "Kerala, India",
+      value: location,
     },
   ];
 

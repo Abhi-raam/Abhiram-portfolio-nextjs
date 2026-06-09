@@ -1,63 +1,45 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Monitor, Server, Wrench } from "lucide-react";
 
 interface SkillItem {
   name: string;
-  level: number; // percentage
+  level: number;
+  category: "frontend" | "backend" | "tools";
 }
 
-interface SkillCategory {
-  title: string;
-  icon: React.ReactNode;
-  skills: SkillItem[];
-  color: string;
-  bgColor: string;
+interface SkillsProps {
+  skills?: SkillItem[];
 }
 
-export default function Skills() {
-  const skillCategories: SkillCategory[] = [
+export default function Skills({ skills = [] }: SkillsProps) {
+  const categories = useMemo(() => [
     {
       title: "Frontend Development",
       icon: <Monitor className="text-indigo-600" size={20} />,
       color: "bg-indigo-600",
       bgColor: "bg-indigo-50",
-      skills: [
-        { name: "React.js", level: 90 },
-        { name: "Next.js", level: 85 },
-        { name: "TypeScript", level: 85 },
-        { name: "JavaScript", level: 90 },
-        { name: "Tailwind CSS", level: 95 },
-        { name: "HTML5 & CSS3", level: 95 },
-      ],
+      items: skills.filter((s) => s.category === "frontend"),
     },
     {
       title: "Backend & Database",
       icon: <Server className="text-violet-600" size={20} />,
       color: "bg-violet-600",
       bgColor: "bg-violet-50",
-      skills: [
-        { name: "Node.js", level: 80 },
-        { name: "Express.js", level: 80 },
-        { name: "MongoDB", level: 75 },
-        { name: "Firebase", level: 80 },
-      ],
+      items: skills.filter((s) => s.category === "backend"),
     },
     {
       title: "Tools & Deployments",
       icon: <Wrench className="text-emerald-600" size={20} />,
       color: "bg-emerald-600",
       bgColor: "bg-emerald-50",
-      skills: [
-        { name: "Git & GitHub", level: 88 },
-        { name: "VS Code", level: 92 },
-        { name: "Postman", level: 85 },
-        { name: "Vercel", level: 90 },
-      ],
+      items: skills.filter((s) => s.category === "tools"),
     },
-  ];
+  ], [skills]);
+
+  if (!skills || skills.length === 0) return null;
 
   return (
     <section id="skills" className="py-24 bg-slate-50/50">
@@ -73,12 +55,8 @@ export default function Skills() {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {skillCategories.map((category, catIdx) => (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: catIdx * 0.1 }}
+          {categories.map((category, catIdx) => (
+            <div
               key={category.title}
               className="glass-card p-6 md:p-8 rounded-2xl border border-slate-100 flex flex-col h-full hover:border-slate-200 hover:shadow-md transition-all duration-300"
             >
@@ -92,7 +70,7 @@ export default function Skills() {
 
               {/* Progress Bars */}
               <div className="space-y-6 flex-1">
-                {category.skills.map((skill) => (
+                {category.items.map((skill) => (
                   <div key={skill.name} className="space-y-2">
                     <div className="flex justify-between text-xs font-semibold text-slate-700">
                       <span>{skill.name}</span>
@@ -113,7 +91,7 @@ export default function Skills() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

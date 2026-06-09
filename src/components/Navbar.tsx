@@ -18,7 +18,7 @@ const navItems: NavItem[] = [
   { label: "Contact", href: "#contact" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ name }: { name?: string }) {
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -58,6 +58,15 @@ export default function Navbar() {
     };
   }, []);
 
+  if (!name) return null;
+
+  const initials = name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const el = document.querySelector(href);
@@ -86,10 +95,10 @@ export default function Navbar() {
           className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2 group"
         >
           <span className="h-9 w-9 rounded-xl bg-linear-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-extrabold shadow-sm shadow-indigo-200 group-hover:scale-105 transition-transform duration-200">
-            AS
+            {initials}
           </span>
           <span className="bg-linear-to-tr from-slate-900 via-slate-800 to-indigo-950 bg-clip-text text-transparent">
-            Abhiram Suresh
+            {name}
           </span>
         </a>
 

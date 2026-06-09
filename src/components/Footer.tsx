@@ -4,7 +4,20 @@ import React from "react";
 import { Mail } from "lucide-react";
 import { Github, Linkedin } from "@/components/BrandIcons";
 
-export default function Footer() {
+interface FooterProps {
+  name?: string;
+  email?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
+}
+
+export default function Footer({
+  name,
+  email,
+  linkedinUrl,
+  githubUrl,
+}: FooterProps) {
+  if (!name) return null;
   const currentYear = new Date().getFullYear();
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -16,6 +29,13 @@ export default function Footer() {
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
+
+  const initials = name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <footer className="bg-slate-900 text-slate-400 py-16 border-t border-slate-800">
@@ -30,9 +50,9 @@ export default function Footer() {
               className="text-lg font-bold tracking-tight text-white flex items-center gap-2 group"
             >
               <span className="h-8 w-8 rounded-lg bg-linear-to-tr from-indigo-500 to-violet-500 text-white flex items-center justify-center font-extrabold shadow-sm shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
-                AS
+                {initials}
               </span>
-              Abhiram Suresh
+              {name}
             </a>
             <p className="text-xs text-slate-500 text-center md:text-left">
               Software Engineer specializing in building modern web apps.
@@ -87,31 +107,37 @@ export default function Footer() {
 
           {/* Social Links (Column 3) */}
           <div className="col-span-5 lg:col-span-2 flex justify-center md:justify-end items-center gap-4">
-            <a
-              href="https://github.com/AbhiramSuresh"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
-              aria-label="GitHub"
-            >
-              <Github size={16} />
-            </a>
-            <a
-              href="https://linkedin.com/in/abhiram-suresh"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={16} />
-            </a>
-            <a
-              href="mailto:abhiramsuresh.dev@gmail.com"
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
-              aria-label="Email"
-            >
-              <Mail size={16} />
-            </a>
+            {githubUrl && (
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                aria-label="GitHub"
+              >
+                <Github size={16} />
+              </a>
+            )}
+            {linkedinUrl && (
+              <a
+                href={linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={16} />
+              </a>
+            )}
+            {email && (
+              <a
+                href={`mailto:${email}`}
+                className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                aria-label="Email"
+              >
+                <Mail size={16} />
+              </a>
+            )}
           </div>
         </div>
 
@@ -121,7 +147,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 text-center sm:text-left">
           <div>
-            &copy; {currentYear} Abhiram Suresh. All rights reserved.
+            &copy; {currentYear} {name}. All rights reserved.
           </div>
           <div className="flex gap-4">
             <span>Built with React, Next.js, TypeScript, and Tailwind CSS</span>

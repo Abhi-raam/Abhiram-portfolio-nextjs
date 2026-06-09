@@ -6,7 +6,26 @@ import { motion } from "framer-motion";
 import { ArrowRight, FileText } from "lucide-react";
 import { Github, Linkedin } from "@/components/BrandIcons";
 
-export default function Hero() {
+interface HeroProps {
+  name?: string;
+  title?: string;
+  bio1?: string;
+  resumeUrl?: string;
+  githubUrl?: string;
+  linkedinUrl?: string;
+  imageUrl?: string;
+}
+
+export default function Hero({
+  name,
+  title,
+  bio1,
+  resumeUrl,
+  githubUrl,
+  linkedinUrl,
+  imageUrl,
+}: HeroProps) {
+  if (!name) return null;
   const handleScrollToProjects = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const el = document.querySelector("#projects");
@@ -49,7 +68,7 @@ export default function Hero() {
           >
             Hi, I&apos;m{" "}
             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-800 bg-clip-text text-transparent">
-              Abhiram Suresh
+              {name}
             </span>
           </motion.h1>
 
@@ -59,7 +78,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-xl sm:text-2xl font-semibold text-indigo-950 mb-6"
           >
-            Software Engineer | Frontend Developer
+            {title}
           </motion.h2>
 
           <motion.p
@@ -68,9 +87,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed"
           >
-            I specialize in crafting premium, high-performance, and responsive web applications.
-            Focused on building intuitive interfaces using React.js, Next.js, TypeScript, Tailwind CSS, 
-            Progressive Web Apps (PWA), and modern web technologies.
+            {bio1}
           </motion.p>
 
           {/* Action Buttons */}
@@ -88,14 +105,18 @@ export default function Hero() {
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
 
-            <a
-              href="/resume.pdf"
-              download="Abhiram_Suresh_Resume.pdf"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium shadow-sm transition-all duration-200 cursor-pointer"
-            >
-              <FileText size={18} />
-              Download Resume
-            </a>
+            {resumeUrl && (
+              <a
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download={resumeUrl.endsWith(".pdf") ? "Abhiram_Suresh_Resume.pdf" : undefined}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium shadow-sm transition-all duration-200 cursor-pointer"
+              >
+                <FileText size={18} />
+                Download Resume
+              </a>
+            )}
           </motion.div>
 
           {/* Social Links */}
@@ -105,24 +126,28 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="flex justify-center lg:justify-start items-center gap-4 text-slate-400"
           >
-            <a
-              href="https://github.com/AbhiramSuresh"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 hover:text-slate-800 hover:bg-slate-50 transition-colors bg-white"
-              aria-label="GitHub"
-            >
-              <Github size={20} />
-            </a>
-            <a
-              href="https://linkedin.com/in/abhiram-suresh"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 hover:text-slate-800 hover:bg-slate-50 transition-colors bg-white"
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={20} />
-            </a>
+            {githubUrl && (
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 hover:text-slate-800 hover:bg-slate-50 transition-colors bg-white"
+                aria-label="GitHub"
+              >
+                <Github size={20} />
+              </a>
+            )}
+            {linkedinUrl && (
+              <a
+                href={linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 hover:text-slate-800 hover:bg-slate-50 transition-colors bg-white"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={20} />
+              </a>
+            )}
           </motion.div>
         </div>
 
@@ -138,8 +163,8 @@ export default function Hero() {
             <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-violet-500 rounded-full blur-xl opacity-20 scale-105 animate-pulse-slow" />
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-white shadow-2xl glass-card">
               <Image
-                src="/profile.png"
-                alt="Abhiram Suresh"
+                src={imageUrl || "/profile.png"}
+                alt={name}
                 fill
                 priority
                 sizes="(max-width: 640px) 256px, (max-width: 768px) 320px, 384px"
