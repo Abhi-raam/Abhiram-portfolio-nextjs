@@ -21,10 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build and export static site
-        run: |
-          npm run build
-          npm run export   # creates ./out folder
+      - name: Build static site
+        run: npm run build   # output: 'export' creates ./out folder
 
       - name: Deploy to target GitHub Pages repo
         uses: peaceiris/actions-gh-pages@v4
