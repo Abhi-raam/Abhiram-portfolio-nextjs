@@ -22,12 +22,12 @@ jobs:
         run: npm ci
 
       - name: Build static site
-        run: npm run build   # output: 'export' creates ./out folder
+        run: npm run export   # generate static files into ./out
 
       - name: Deploy to target GitHub Pages repo
         uses: peaceiris/actions-gh-pages@v4
         with:
-          destination_repo: Abhi-raam/Abhi-raam.github.io
+          external_repository: Abhi-raam/Abhi-raam.github.io
           publish_branch: gh-pages
           publish_dir: ./out
-          github_token: ${{ secrets.GH_PAGES_TOKEN }}
+          personal_token: ${{ env.GH_TOKEN }}
