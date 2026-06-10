@@ -1,35 +1,49 @@
-name: Deploy to GitHub Pages
+name: Deploy Portfolio to GitHub Pages Repo
 
 on:
   push:
-    branches: [main, master]
+    branches:
+      - master
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
-    steps:
-      - name: Checkout source repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup Node.js
+    steps:
+      - name: Checkout Portfolio Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 22
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Build static site
-        run: npm run export   # generate static files into ./out
+      - name: Build Next.js
+        run: |
+          npm run build
 
-      - name: Deploy to target GitHub Pages repo
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          external_repository: Abhi-raam/Abhi-raam.github.io
-          publish_branch: gh-pages
-          publish_dir: ./out
-          personal_token: ${{ env.GH_TOKEN }}
+      - name: Clone GitHub Pages Repo
+        run: |
+          git clone --branch master https://x-access-token:${{ secrets.GH_PAGES_TOKEN }}@github.com/Abhi-raam/Abhi-raam.github.io.git pages
+
+      - name: Remove Old Files
+        run: |
+          find pages -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+
+      - name: Copy Exported Site
+        run: |
+          cp -r out/* pages/
+
+      - name: Commit and Push
+        run: |
+          cd pages
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add .
+          git commit -m "Deploy from portfolio repo" || echo "No changes"
+
+          git push
