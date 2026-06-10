@@ -89,13 +89,7 @@ export default function Footer({
             >
               Skills
             </a>
-            <a
-              href="#achievements"
-              onClick={(e) => handleLinkClick(e, "#achievements")}
-              className="text-xs hover:text-white transition-colors"
-            >
-              Achievements
-            </a>
+
             <a
               href="#contact"
               onClick={(e) => handleLinkClick(e, "#contact")}

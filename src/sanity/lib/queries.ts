@@ -47,8 +47,3 @@ export const skillsQuery = groq`*[_type == "skill"] | order(order asc) {
   category
 }`;
 
-export const achievementsQuery = groq`*[_type == "achievement"] | order(order asc) {
-  title,
-  description,
-  icon
-}`;

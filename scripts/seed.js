@@ -295,22 +295,6 @@ async function seed() {
   }
   console.log("✅ Seeding Skills complete.");
 
-  // G. Seed Achievements
-  console.log("🏆 Seeding Achievements...");
-  const achievements = [
-    { _type: "achievement", _id: "ac1", title: "Production Projects Delivered", description: "Successfully built, optimized, and deployed multiple production websites and business portals including Windsor Vale and institutional applications.", icon: "award", order: 1 },
-    { _type: "achievement", _id: "ac2", title: "PWA Development", description: "Implemented Progressive Web Application architectures enabling caching, offline-ready features, and native-like installation experiences on mobile and desktop.", icon: "zap", order: 2 },
-    { _type: "achievement", _id: "ac3", title: "Scalable Full-Stack Solutions", description: "Built clean database models and backend services in Node/Express/MongoDB capable of processing real-time events and high-concurrency requests.", icon: "database", order: 3 },
-    { _type: "achievement", _id: "ac4", title: "Next.js Conf Participation", description: "Attended and actively engaged in Next.js Conf, learning latest conventions including server actions, caching strategies, and rendering optimizations.", icon: "terminal", order: 4 },
-    { _type: "achievement", _id: "ac5", title: "Educational Platform Dev", description: "Developed comprehensive learning systems and calculators (Learning Portal, ScoreMate) to aid student assessment and course management.", icon: "graduation", order: 5 },
-    { _type: "achievement", _id: "ac6", title: "Agile & Freelance Adaptability", description: "Thrived in product-driven environments collaborating with multi-disciplinary teams, and managed freelance delivery cycles end-to-end.", icon: "briefcase", order: 6 },
-  ];
-
-  for (const ac of achievements) {
-    await client.createOrReplace(ac);
-  }
-  console.log("✅ Seeding Achievements complete.");
-
   console.log("\n🎉 Database Seeding successfully completed! All default content has been uploaded to Sanity CMS.");
 }
 

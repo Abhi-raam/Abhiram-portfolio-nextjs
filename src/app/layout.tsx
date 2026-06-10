@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://abhiramsuresh.dev",
+    url: "https://abhi-raam.github.io/",
     title: "Abhiram Suresh | Software Engineer & Frontend Developer",
     description:
       "Professional portfolio of Abhiram Suresh, a Software Engineer and Frontend Developer specializing in React.js, Next.js, TypeScript, Tailwind CSS, and Progressive Web Apps (PWAs).",

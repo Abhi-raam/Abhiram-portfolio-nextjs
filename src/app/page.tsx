@@ -5,7 +5,6 @@ import About from "@/components/About";
 import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
-import Achievements from "@/components/Achievements";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -17,7 +16,6 @@ import {
   educationsQuery,
   projectsQuery,
   skillsQuery,
-  achievementsQuery,
 } from "@/sanity/lib/queries";
 
 // ISR (Incremental Static Regeneration) - Revalidate every 60 seconds
@@ -29,7 +27,6 @@ export default async function Home() {
   let educations = [];
   let projects = [];
   let skills = [];
-  let achievements = [];
 
   try {
     profile = await client.fetch(profileQuery);
@@ -37,7 +34,6 @@ export default async function Home() {
     educations = await client.fetch(educationsQuery);
     projects = await client.fetch(projectsQuery);
     skills = await client.fetch(skillsQuery);
-    achievements = await client.fetch(achievementsQuery);
   } catch (error) {
     console.error("Failed to fetch Sanity data, using local static fallbacks:", error);
   }
@@ -84,9 +80,6 @@ export default async function Home() {
         />
         <Skills
           skills={skills && skills.length > 0 ? skills : undefined}
-        />
-        <Achievements
-          achievements={achievements && achievements.length > 0 ? achievements : undefined}
         />
         <Contact
           email={email}
