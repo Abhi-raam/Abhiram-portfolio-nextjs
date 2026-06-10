@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
-      steps:
+    steps:
       - name: Checkout source repository
         uses: actions/checkout@v4
         with:
