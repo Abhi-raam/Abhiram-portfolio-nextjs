@@ -18,8 +18,7 @@ import {
   skillsQuery,
 } from "@/sanity/lib/queries";
 
-// Disable Next.js caching to always fetch the latest data from Sanity
-export const revalidate = 0;
+
 
 export default async function Home() {
   let profile = null;
