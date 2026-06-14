@@ -48,9 +48,8 @@ export default defineType({
     }),
     defineField({
       name: "liveUrl",
-      title: "Live Demo URL",
+      title: "Live Demo URL (Optional)",
       type: "url",
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "githubUrl",

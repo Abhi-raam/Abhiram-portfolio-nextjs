@@ -13,7 +13,7 @@ interface Project {
   image: any;
   techStack: string[];
   category: "react" | "next" | "fullstack";
-  liveUrl: string;
+  liveUrl?: string;
   githubUrl?: string;
 }
 
@@ -140,25 +140,32 @@ export default function Projects({ projects = [] }: ProjectsProps) {
 
                     {/* Links */}
                     <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-500 transition-colors"
-                      >
-                        <ExternalLink size={14} />
-                        Live Demo
-                      </a>
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-500 transition-colors"
+                        >
+                          <ExternalLink size={14} />
+                          Live Demo
+                        </a>
+                      )}
 
                       {project.githubUrl && (
                         <a
                           href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                          className={
+                            project.liveUrl
+                              ? "inline-flex items-center justify-center p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                              : "flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors text-xs font-semibold"
+                          }
                           title="GitHub Repository"
                         >
-                          <Github size={16} />
+                          <Github size={project.liveUrl ? 16 : 14} />
+                          {!project.liveUrl && "GitHub Repository"}
                         </a>
                       )}
                     </div>
