@@ -1,22 +1,22 @@
 "use client";
 
 import React from "react";
-import { Mail, Globe, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import { Github, Linkedin } from "@/components/BrandIcons";
 
 interface ContactProps {
   email?: string;
+  mobile?: string;
   linkedinUrl?: string;
   githubUrl?: string;
-  portfolioUrl?: string;
   location?: string;
 }
 
 export default function Contact({
   email,
+  mobile,
   linkedinUrl,
   githubUrl,
-  portfolioUrl = "#home",
   location,
 }: ContactProps) {
   if (!email) return null;
@@ -47,12 +47,16 @@ export default function Contact({
           },
         ]
       : []),
-    {
-      icon: <Globe className="text-emerald-600" size={24} />,
-      label: "Portfolio",
-      value: portfolioUrl === "#home" ? "abhiramsuresh.dev" : portfolioUrl.replace(/^https?:\/\/(www\.)?/, ""),
-      href: portfolioUrl,
-    },
+    ...(mobile
+      ? [
+          {
+            icon: <Phone className="text-emerald-600" size={24} />,
+            label: "Mobile",
+            value: mobile,
+            href: `tel:${mobile.replace(/[^0-9+]/g, '')}`,
+          },
+        ]
+      : []),
     {
       icon: <MapPin className="text-rose-600" size={24} />,
       label: "Location",

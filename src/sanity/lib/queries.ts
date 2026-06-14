@@ -9,6 +9,7 @@ export const profileQuery = groq`*[_type == "profile"][0] {
   "resumeUrl": resume.asset->url,
   stats,
   email,
+  mobile,
   linkedin,
   github,
   location,

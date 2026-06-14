@@ -18,8 +18,8 @@ import {
   skillsQuery,
 } from "@/sanity/lib/queries";
 
-// ISR (Incremental Static Regeneration) - Revalidate every 60 seconds
-export const revalidate = 60;
+// Disable Next.js caching to always fetch the latest data from Sanity
+export const revalidate = 0;
 
 export default async function Home() {
   let profile = null;
@@ -46,6 +46,7 @@ export default async function Home() {
   const resumeUrl = profile?.resumeUrl || undefined;
   const stats = profile?.stats || undefined;
   const email = profile?.email || undefined;
+  const mobile = profile?.mobile || undefined;
   const linkedinUrl = profile?.linkedin || undefined;
   const githubUrl = profile?.github || undefined;
   const location = profile?.location || undefined;
@@ -83,6 +84,7 @@ export default async function Home() {
         />
         <Contact
           email={email}
+          mobile={mobile}
           linkedinUrl={linkedinUrl}
           githubUrl={githubUrl}
           location={location}

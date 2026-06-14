@@ -80,6 +80,11 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "mobile",
+      title: "Mobile Number",
+      type: "string",
+    }),
+    defineField({
       name: "linkedin",
       title: "LinkedIn URL",
       type: "url",
