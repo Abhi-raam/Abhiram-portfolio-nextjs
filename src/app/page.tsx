@@ -1,12 +1,14 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Experience from "@/components/Experience";
-import Projects from "@/components/Projects";
-import Skills from "@/components/Skills";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
+
+const About = dynamic(() => import("@/components/About"));
+const Experience = dynamic(() => import("@/components/Experience"));
+const Projects = dynamic(() => import("@/components/Projects"));
+const Skills = dynamic(() => import("@/components/Skills"));
+const Contact = dynamic(() => import("@/components/Contact"));
+const Footer = dynamic(() => import("@/components/Footer"));
 
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
@@ -18,8 +20,8 @@ import {
   skillsQuery,
 } from "@/sanity/lib/queries";
 
-// Disable Next.js caching to always fetch the latest data from Sanity
-export const revalidate = 0;
+// Revalidate every 30 seconds to balance performance and freshness
+export const revalidate = 30;
 
 export default async function Home() {
   let profile = null;

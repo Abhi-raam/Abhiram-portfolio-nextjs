@@ -124,7 +124,7 @@ export default function Hero({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="flex justify-center lg:justify-start items-center gap-4 text-slate-400"
+            className="flex justify-center lg:justify-start items-center gap-4 text-slate-500"
           >
             {githubUrl && (
               <a

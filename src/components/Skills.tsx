@@ -74,7 +74,7 @@ export default function Skills({ skills = [] }: SkillsProps) {
                   <div key={skill.name} className="space-y-2">
                     <div className="flex justify-between text-xs font-semibold text-slate-700">
                       <span>{skill.name}</span>
-                      <span className="text-slate-400">{skill.level}%</span>
+                      <span className="text-slate-500">{skill.level}%</span>
                     </div>
                     
                     {/* Track */}

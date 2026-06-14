@@ -103,7 +103,7 @@ export default function Contact({
                 {info.icon}
               </div>
               <div className="space-y-1">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                   {info.label}
                 </div>
                 {info.href ? (

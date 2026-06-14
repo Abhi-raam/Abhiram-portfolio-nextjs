@@ -66,7 +66,7 @@ export default function Experience({
 
                   {/* Side Date (Desktop Only) */}
                   <div className="hidden md:block absolute -left-44 top-2 w-36 text-right">
-                    <span className="text-xs font-semibold text-slate-400 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/50 inline-flex items-center gap-1 whitespace-nowrap">
+                    <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/50 inline-flex items-center gap-1 whitespace-nowrap">
                       <Calendar size={12} />
                       {item.duration}
                     </span>
@@ -75,7 +75,7 @@ export default function Experience({
                   {/* Card content */}
                   <div className="glass-card p-6 md:p-8 rounded-2xl border border-slate-100 hover:border-indigo-100 transition-colors duration-300">
                     {/* Mobile Date */}
-                    <div className="md:hidden mb-3 inline-flex items-center gap-1 text-xs font-semibold text-slate-400 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/50 whitespace-nowrap">
+                    <div className="md:hidden mb-3 inline-flex items-center gap-1 text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/50 whitespace-nowrap">
                       <Calendar size={12} />
                       {item.duration}
                     </div>
@@ -138,7 +138,7 @@ export default function Experience({
 
                   {/* Side Date (Desktop Only) */}
                   <div className="hidden md:block absolute -left-44 top-2 w-36 text-right">
-                    <span className="text-xs font-semibold text-slate-400 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/50 inline-flex items-center gap-1 whitespace-nowrap">
+                    <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/50 inline-flex items-center gap-1 whitespace-nowrap">
                       <Calendar size={12} />
                       {item.duration}
                     </span>
@@ -147,7 +147,7 @@ export default function Experience({
                   {/* Card content */}
                   <div className="glass-card p-6 md:p-8 rounded-2xl border border-slate-100 hover:border-indigo-100 transition-colors duration-300">
                     {/* Mobile Date */}
-                    <div className="md:hidden mb-3 inline-flex items-center gap-1 text-xs font-semibold text-slate-400 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/50 whitespace-nowrap">
+                    <div className="md:hidden mb-3 inline-flex items-center gap-1 text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/50 whitespace-nowrap">
                       <Calendar size={12} />
                       {item.duration}
                     </div>
