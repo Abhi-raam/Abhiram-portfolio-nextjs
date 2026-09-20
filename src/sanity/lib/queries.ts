@@ -2,9 +2,17 @@ import { groq } from "next-sanity";
 
 export const profileQuery = groq`*[_type == "profile"][0] {
   name,
+  wordmarkGhost,
+  wordmarkRest,
   title,
+  headlineWord1,
+  headlineWord2,
+  estText,
+  heroLede,
+  disciplines,
+  heroRole,
+  aboutQuote,
   bio1,
-  bio2,
   image,
   "resumeUrl": resume.asset->url,
   stats,
@@ -13,38 +21,56 @@ export const profileQuery = groq`*[_type == "profile"][0] {
   linkedin,
   github,
   location,
-  specialties
+  availabilityStatus,
+  availabilityLocation,
+  scatterKeywords,
+  channels,
+  legalCopyright,
+  legalCredit
 }`;
 
 export const experiencesQuery = groq`*[_type == "experience"] | order(order asc) {
+  _id,
+  role,
   title,
   company,
+  period,
   duration,
+  isCurrent,
+  type,
+  location,
   description,
-  tags
-}`;
-
-export const educationsQuery = groq`*[_type == "education"] | order(order asc) {
-  title,
-  subtitle,
-  duration,
-  description,
-  tags
+  highlights,
+  tech,
+  tags,
+  order
 }`;
 
 export const projectsQuery = groq`*[_type == "project"] | order(order asc) {
+  _id,
   name,
-  description,
-  image,
+  index,
+  projectType,
   category,
-  techStack,
+  desc,
+  image,
+  mobileImage,
+  tech,
   liveUrl,
-  githubUrl
+  githubUrl,
+  order
 }`;
 
-export const skillsQuery = groq`*[_type == "skill"] | order(order asc) {
+export const servicesQuery = groq`*[_type == "service"] | order(order asc) {
+  _id,
   name,
-  level,
-  category
+  number,
+  category,
+  titlePrefix,
+  titleGhost,
+  description,
+  chips,
+  layout,
+  href,
+  order
 }`;
-

@@ -1,33 +1,44 @@
 @import "tailwindcss";
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  
-  --animate-blob: blob 10s infinite;
-  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.95);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
+@theme {
+  --color-canvas: #e9edee;
+  --color-paper: #fcfcfc;
+  --color-ink: #111111;
+  --color-ink-black: #0c0c0c;
+  --color-ghost-hi: #b9b9b9;
+  --color-ghost-lo: #5a5a5a;
+  --color-ghost-hi-inv: #e8e8e8;
+  --color-ghost-lo-inv: #6e6e6e;
+  --color-muted: #9a9a9a;
+  --color-hairline: #d6d6d6;
+  --color-hairline-dark: #ffffffe6;
+  --color-paper-on-black: #ffffff;
+  --radius-pill: 999px;
+  --radius-card: 24px;
+  --font-archivo: var(--font-archivo), "Archivo", sans-serif, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", monospace;
+  --ease-custom: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --spacing-gutter: clamp(20px, 4.5vw, 64px);
 }
 
 :root {
-  --background: #fafafa;
-  --foreground: #0f172a;
+  --canvas: #e9edee;
+  --paper: #fcfcfc;
+  --ink: #111;
+  --ink-black: #0c0c0c;
+  --ghost-hi: #b9b9b9;
+  --ghost-lo: #5a5a5a;
+  --ghost-hi-inv: #e8e8e8;
+  --ghost-lo-inv: #6e6e6e;
+  --muted: #9a9a9a;
+  --hairline: #d6d6d6;
+  --hairline-dark: #ffffffe6;
+  --paper-on-black: #fff;
+  --radius-pill: 999px;
+  --radius-card: 24px;
+  --font: var(--font-archivo), "Archivo", sans-serif, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --gutter: clamp(20px, 4.5vw, 64px);
 }
 
 html {
@@ -35,49 +46,265 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
   overflow-x: hidden;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-transform: uppercase;
+  background: 0 0;
+  border: 0;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
+/* ==========================================================================
+   Typography & Display Utilities
+   ========================================================================== */
+.display {
+  letter-spacing: -0.01em;
+  font-weight: 400;
+  line-height: 0.92;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+.display-xl {
+  font-size: clamp(56px, 11.6vw, 190px);
 }
 
-/* Glassmorphism card styles */
-.glass-card {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+.display-l {
+  font-size: clamp(40px, 7.4vw, 110px);
+  line-height: 0.95;
 }
 
-.glass-nav {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(241, 245, 249, 0.8);
+.display-m {
+  letter-spacing: 0;
+  font-size: clamp(30px, 5.4vw, 78px);
+  font-weight: 300;
+  line-height: 1.05;
 }
 
-/* Background gradient blobs */
-.bg-grid-pattern {
-  background-size: 40px 40px;
-  background-image: linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+.micro {
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.lede {
+  letter-spacing: 0.03em;
+  font-size: clamp(12px, 1.05vw, 15px);
+  line-height: 1.55;
+}
+
+.mut {
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   Gradient Dual-Tone Ghost Text Clipping
+   ========================================================================== */
+.ghost {
+  background: linear-gradient(180deg, var(--ghost-hi) 0%, var(--ghost-lo) 100%);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.on-black .ghost {
+  background: linear-gradient(
+    180deg,
+    var(--ghost-hi-inv) 0%,
+    var(--ghost-lo-inv) 100%
+  );
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.gw {
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.gl {
+  white-space: pre;
+  will-change: transform;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   Shared Pill & Circular Action Buttons
+   ========================================================================== */
+.pill {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: 0 0;
+  justify-content: center;
+  align-items: center;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+  display: inline-flex;
+}
+
+.pill:hover,
+.pill--active {
+  background: var(--ink-black);
+  border-color: var(--ink-black);
+  color: #fff;
+}
+
+.circle-btn {
+  aspect-ratio: 1;
+  border: 1px solid var(--hairline);
+  background: 0 0;
+  border-radius: 50%;
+  flex: none;
+  place-items: center;
+  width: 56px;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  display: grid;
+}
+
+.circle-btn svg {
+  stroke: currentColor;
+  width: 38%;
+  height: 38%;
+  pointer-events: none;
+  transform-origin: center;
+  will-change: transform;
+  transition: transform 0.25s var(--ease);
+}
+
+.circle-btn:focus:not(:focus-visible) {
+  outline: none;
+  background: 0 0;
+  border-color: var(--hairline);
+  color: inherit;
+}
+
+.circle-btn.no-hover {
+  background: 0 0 !important;
+  border-color: var(--hairline) !important;
+  color: inherit !important;
+}
+
+.circle-btn.circle-btn--ne.no-hover {
+  background: var(--paper) !important;
+}
+
+.circle-btn.no-hover svg {
+  transform: none !important;
+}
+
+.circle-btn--ne.no-hover svg {
+  transform: rotate(-45deg) !important;
+}
+
+.circle-btn:hover:not(.no-hover) {
+  background: var(--ink-black);
+  border-color: var(--ink-black);
+  color: #fff;
+}
+
+.circle-btn:not(.circle-btn--ne):hover:not(.no-hover) svg {
+  transform: rotate(45deg);
+}
+
+.circle-btn--ne svg {
+  transform: rotate(-45deg);
+}
+
+.circle-btn--ne:hover:not(.no-hover) svg {
+  transform: rotate(0deg);
+}
+
+.arr {
+  fill: none;
+  stroke-width: 1.3px;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Hero Portrait Image Mask & Grayscale Filter
+   ========================================================================== */
+.portrait-img {
+  aspect-ratio: 0.8;
+  width: 100%;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
+}
+
+.portrait-img img {
+  object-fit: cover;
+  object-position: top;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* ==========================================================================
+   Contact Scatter Background Ambient Keywords
+   ========================================================================== */
+.scatter {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.scatter span {
+  letter-spacing: 0.1em;
+  color: #6e6e6e;
+  font-size: clamp(10px, 1vw, 13px);
+  position: absolute;
+}
+
+/* ==========================================================================
+   Custom Cursor & Navigation Overlays
+   ========================================================================== */
+html.has-gl-cursor,
+html.has-gl-cursor a,
+html.has-gl-cursor button,
+html.has-gl-cursor [role="button"],
+html.has-gl-cursor summary {
+  cursor: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  html.has-gl-cursor,
+  html.has-gl-cursor * {
+    cursor: auto !important;
+  }
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion Preference
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  *,
+  :before,
+  :after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

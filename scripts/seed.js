@@ -34,8 +34,6 @@ if (!projectId) {
 
 if (!token) {
   console.error("❌ Error: SANITY_API_WRITE_TOKEN is missing in .env.local");
-  console.error("Please create a 'write' token at https://www.sanity.io/manage (API tab -> Tokens) and add it to .env.local like:");
-  console.error('SANITY_API_WRITE_TOKEN="your_write_token_here"');
   process.exit(1);
 }
 
@@ -49,14 +47,14 @@ const client = createClient({
 
 async function uploadImageAsset(filePath) {
   if (!fs.existsSync(filePath)) {
-    console.warn(`⚠️ Warning: Image file not found at ${filePath}, skipping asset upload.`);
+    console.warn(`⚠️ Warning: Image file not found at ${filePath}, skipping upload.`);
     return null;
   }
   try {
     const asset = await client.assets.upload("image", fs.createReadStream(filePath), {
       filename: path.basename(filePath),
     });
-    console.log(`✅ Uploaded image asset: ${path.basename(filePath)} (${asset._id})`);
+    console.log(`✅ Uploaded image: ${path.basename(filePath)} (${asset._id})`);
     return {
       _type: "image",
       asset: {
@@ -71,234 +69,449 @@ async function uploadImageAsset(filePath) {
 }
 
 async function seed() {
-  console.log("🚀 Starting database seeding to Sanity CMS...");
+  console.log("🚀 Starting database seeding to Sanity CMS for UI Revamp...");
 
-  // A. Upload Images
+  // A. Upload Media Assets
   console.log("🖼️ Uploading media assets...");
-  const profileImage = await uploadImageAsset(path.join(__dirname, "../public/profile.png"));
-  const konectoImage = await uploadImageAsset(path.join(__dirname, "../public/projects/konecto.png"));
-  const scoremateImage = await uploadImageAsset(path.join(__dirname, "../public/projects/scoremate.png"));
-  const dolistImage = await uploadImageAsset(path.join(__dirname, "../public/projects/dolist.png"));
-  const learningImage = await uploadImageAsset(path.join(__dirname, "../public/projects/learning.png"));
-  const windsorImage = await uploadImageAsset(path.join(__dirname, "../public/projects/windsor.png"));
-  const schoolImage = await uploadImageAsset(path.join(__dirname, "../public/projects/school.png"));
+  const portraitImage = await uploadImageAsset(path.join(__dirname, "../public/portrait-v2.png"));
+  
+  // Screenshots
+  const financeDesktop = await uploadImageAsset(path.join(__dirname, "../public/screenshots/finance-os-desktop.png"));
+  const financeMobile = await uploadImageAsset(path.join(__dirname, "../public/screenshots/finance-os-mobile.png"));
+  
+  const scoremateDesktop = await uploadImageAsset(path.join(__dirname, "../public/screenshots/scoreMate.png"));
+  const scoremateMobile = await uploadImageAsset(path.join(__dirname, "../public/screenshots/scoremate-mobile.png"));
+  
+  const windsorDesktop = await uploadImageAsset(path.join(__dirname, "../public/screenshots/windsorvale-full.png"));
+  const windsorMobile = await uploadImageAsset(path.join(__dirname, "../public/screenshots/windsorvale-full-mobile.png"));
+  
+  const cjemsDesktop = await uploadImageAsset(path.join(__dirname, "../public/screenshots/cjems-desktop.png"));
+  const cjemsMobile = await uploadImageAsset(path.join(__dirname, "../public/screenshots/cjems-mobile.png"));
+  
+  const ifcDesktop = await uploadImageAsset(path.join(__dirname, "../public/screenshots/ifc-desktop.png"));
+  const ifcMobile = await uploadImageAsset(path.join(__dirname, "../public/screenshots/ifc-mobile.png"));
+  
+  const shahul1 = await uploadImageAsset(path.join(__dirname, "../public/screenshots/shahul-weds-jabeen-1.png"));
+  const shahul2 = await uploadImageAsset(path.join(__dirname, "../public/screenshots/shahul-weds-jabeen-2.png"));
 
-  // B. Seed Profile (Singleton)
-  console.log("📝 Seeding Profile Document...");
+  // B. Seed Profile Singleton
+  console.log("📝 Seeding Profile & Settings Document...");
   const profileDoc = {
     _type: "profile",
     _id: "profile",
     name: "Abhiram Suresh",
-    title: "Software Developer",
-    bio1: "I am a 2024 Computer Science graduate who has transitioned into a highly focused Software Engineer, with a core expertise in modern frontend development. My passion lies in designing, building, and launching intuitive, sleek web applications that run seamlessly across all devices.",
-    bio2: "With a solid foundation in React.js, Next.js, TypeScript, and Tailwind CSS, I build highly interactive interfaces. I am deeply concerned with writing clean, modular code and optimizing page speed and performance. My experience spans across collaborative, agile product teams as well as delivering key freelance solutions.",
-    email: "abhiramsuresh.dev@gmail.com",
-    linkedin: "https://linkedin.com/in/abhiram-suresh",
-    github: "https://github.com/AbhiramSuresh",
-    location: "Kerala, India",
-    specialties: [
-      "Next.js & App Router Architecture",
-      "TypeScript Typings & Safety",
-      "Performance Optimization",
-      "Progressive Web Apps (PWA)",
-    ],
+    title: "Frontend Developer",
+    headlineWord1: "ENGINEERING",
+    headlineWord2: "THE FUTURE",
+    estText: "Frontend Developer · 2+ Years",
+    heroLede: "I build responsive, user-centric web applications using React.js, Next.js, TypeScript, and modern frontend technologies.",
+    disciplines: ["React.js", "Next.js", "TypeScript", "REST APIs"],
+    heroRole: "Frontend Developer",
+    aboutQuote: "“Frontend Developer with 2+ years of experience building responsive, user-centric web applications using React.js, Recoil, and SWR.”",
+    bio1: "Frontend Developer with 2+ years of experience building responsive, user-centric web applications using React.js, Recoil, and SWR.",
+    bio2: "Contributing to frontend development of modern applications, dashboards, and responsive web platforms with a focus on usability and performance.",
     stats: [
-      { _key: "stat1", value: "2+ Years", label: "Exp in Web Dev", icon: "briefcase" },
-      { _key: "stat2", value: "15+", label: "Completed Projects", icon: "folder" },
-      { _key: "stat3", value: "12+", label: "Technologies Mastered", icon: "cpu" },
-      { _key: "stat4", value: "1.2k+", label: "GitHub Contributions", icon: "commit" },
+      { _key: "s1", value: "2", suffix: "+", label: "Years Experience" },
+      { _key: "s2", value: "6", suffix: "", label: "Featured Projects" },
+      { _key: "s3", value: "2", suffix: "", label: "Professional Roles" },
     ],
+    email: "iabhiramsuresh@gmail.com",
+    mobile: "+91 8156806105",
+    linkedin: "https://www.linkedin.com/in/abhiram-suresh",
+    github: "https://github.com/Abhi-raam",
+    location: "Kottayam, Kerala, India",
+    availabilityStatus: "Open to Opportunities",
+    availabilityLocation: "Kottayam, Kerala, India",
+    scatterKeywords: ["React.js", "Next.js", "TypeScript", "Tailwind CSS", "JavaScript", "Git"],
+    channels: [
+      {
+        _key: "ch-email",
+        id: "email",
+        type: "email",
+        label: "Email",
+        value: "iabhiramsuresh@gmail.com",
+        displayValue: "iabhiramsuresh@gmail.com",
+        tag: "Direct Inbox",
+        title: "Send an Email",
+        description: "Reach out for project inquiries, opportunities, or collaborations.",
+        href: "mailto:iabhiramsuresh@gmail.com",
+        actionLabel: "Write Email",
+        featured: true,
+      },
+      {
+        _key: "ch-whatsapp",
+        id: "whatsapp",
+        type: "whatsapp",
+        label: "WhatsApp",
+        value: "+91 8156806105",
+        displayValue: "+91 8156806105",
+        tag: "Instant Chat",
+        title: "Quick WhatsApp Message",
+        description: "Reach out directly on WhatsApp for project inquiries and quick conversations.",
+        href: "https://wa.me/918156806105",
+        actionLabel: "Open Chat",
+        featured: false,
+      },
+      {
+        _key: "ch-linkedin",
+        id: "linkedin",
+        type: "linkedin",
+        label: "LinkedIn",
+        value: "abhiram-suresh",
+        displayValue: "/in/abhiram-suresh",
+        tag: "Professional",
+        title: "Connect on LinkedIn",
+        description: "Connect with me professionally and explore my experience and projects.",
+        href: "https://www.linkedin.com/in/abhiram-suresh",
+        actionLabel: "View Profile",
+        featured: false,
+      },
+      {
+        _key: "ch-github",
+        id: "github",
+        type: "github",
+        label: "GitHub",
+        value: "Abhi-raam",
+        displayValue: "@Abhi-raam",
+        tag: "Code",
+        title: "Explore GitHub Code",
+        description: "Browse my repositories, projects, and development work.",
+        href: "https://github.com/Abhi-raam",
+        actionLabel: "View GitHub",
+        featured: false,
+      },
+    ],
+    legalCopyright: "© Abhiram Suresh. All rights reserved",
+    legalCredit: "Built by Abhiram Suresh",
   };
 
-  if (profileImage) {
-    profileDoc.image = profileImage;
+  if (portraitImage) {
+    profileDoc.image = portraitImage;
   }
 
   await client.createOrReplace(profileDoc);
-  console.log("✅ Seeding Profile complete.");
+  console.log("✅ Profile document seeded.");
 
   // C. Seed Experiences
-  console.log("💼 Seeding Experiences Timeline...");
+  console.log("💼 Seeding Career Experiences...");
   const experiences = [
     {
       _type: "experience",
-      _id: "exp1",
-      title: "Software Developer",
+      _id: "exp-webandcrafts",
+      role: "Software Engineer",
       company: "Webandcrafts",
-      duration: "2024 - Present",
-      description: "Lead frontend feature design and implementation. Collaborate with cross-functional product and design teams to translate complex requirements into modern, performant, and responsive interfaces. Spearhead performance optimization initiatives reducing load time and improving Core Web Vitals.",
-      tags: ["React.js", "Next.js", "TypeScript", "Tailwind CSS", "Team Collaboration", "Performance Optimization"],
+      period: "09 DEC 2024 — PRESENT",
+      isCurrent: true,
+      type: "Full-Time",
+      location: "Kerala, India",
+      description: "Contributing to frontend development of web applications using React.js, Redux, TanStack Query, and Tailwind CSS, while integrating REST APIs and collaborating with backend teams.",
+      highlights: [
+        "Developing responsive and user-centric web interfaces using React.js and modern frontend technologies.",
+        "Working with Redux and TanStack Query for state management and efficient data fetching.",
+        "Collaborating with Python and PHP backend teams for REST API integration and feature delivery.",
+        "Maintaining clean, scalable, and reusable frontend code with a focus on usability and performance.",
+        "Working closely with cross-functional teams in an Agile development environment.",
+      ],
+      tech: ["React.js", "Redux", "TanStack Query", "Tailwind CSS", "REST APIs", "Git"],
       order: 1,
     },
     {
       _type: "experience",
-      _id: "exp2",
-      title: "MERN Stack Developer",
+      _id: "exp-zyfarer",
+      role: "MERN Stack Developer",
       company: "Zyfarer Innovations",
-      duration: "2023 - 2024",
-      description: "Architected and deployed full-stack web applications. Utilized MongoDB, Express.js, React.js, and Node.js to create scalable database-driven portals. Integrated RESTful APIs, payment gateways, and secure authentication flows.",
-      tags: ["MongoDB", "Express.js", "React.js", "Node.js", "REST APIs", "Scalable Web Solutions"],
+      period: "10 JAN 2024 — 30 NOV 2024",
+      isCurrent: false,
+      type: "Full-Time",
+      location: "Kerala, India",
+      description: "Developed a high-performance management dashboard using React, Vite, and Tailwind CSS with a fully responsive user interface.",
+      highlights: [
+        "Developed responsive management dashboard interfaces using React, Vite, and Tailwind CSS.",
+        "Implemented Recoil and Jotai for state management and SWR for optimized data fetching.",
+        "Collaborated with Python and PHP backend teams to integrate REST APIs.",
+        "Focused on reusable components, maintainable code, and application usability.",
+      ],
+      tech: ["React.js", "Vite", "Tailwind CSS", "Recoil", "Jotai", "SWR", "REST APIs"],
       order: 2,
-    },
-    {
-      _type: "experience",
-      _id: "exp3",
-      title: "MERN Stack Trainee",
-      company: "Zyfarer Innovations",
-      duration: "2022 - 2023",
-      description: "Gained hands-on project development experience. Learned software development fundamentals, version control with Git, databases, and clean coding practices. Collaborated in Agile mock sprints to build full-stack projects.",
-      tags: ["JavaScript", "HTML5 & CSS3", "Git & GitHub", "Agile Fundamentals", "MERN Basics"],
-      order: 3,
     },
   ];
 
   for (const exp of experiences) {
     await client.createOrReplace(exp);
   }
-  console.log("✅ Seeding Experiences complete.");
+  console.log("✅ Experiences seeded.");
 
-  // D. Seed Education
-  console.log("🎓 Seeding Education History...");
-  const educations = [
-    {
-      _type: "education",
-      _id: "edu1",
-      title: "Bachelor of Technology in Computer Science & Engineering",
-      subtitle: "Anna University",
-      duration: "2020 - 2024",
-      description: "2024 Computer Science graduate. Focused on key core computing domains including Data Structures & Algorithms, Software Engineering, Object-Oriented Programming, Database Management Systems, and Web Application Architectures.",
-      tags: ["Computer Science", "Algorithms & DS", "Software Engineering", "DBMS", "Core Computing"],
-      order: 1,
-    },
-    {
-      _type: "education",
-      _id: "edu2",
-      title: "Higher Secondary Education (Biology Science)",
-      subtitle: "Board of Higher Secondary Education, Kerala",
-      duration: "2018 - 2020",
-      description: "Completed science stream majoring in Biology Science. Built a strong foundation in physics, mathematics and biology fundamentals.",
-      tags: ["Biology", "Mathematics", "Physics", "Chemistry"],
-      order: 2,
-    },
-  ];
-
-  for (const edu of educations) {
-    await client.createOrReplace(edu);
-  }
-  console.log("✅ Seeding Education complete.");
-
-  // E. Seed Projects
+  // D. Seed Projects
   console.log("🚀 Seeding Featured Projects...");
   const projects = [
     {
       _type: "project",
-      _id: "proj1",
-      name: "Konecto",
-      description: "An anonymous real-time chat platform supporting fast communication channels. Designed for frictionless, instant connections with full privacy features.",
-      category: "fullstack",
-      techStack: ["React.js", "Node.js", "Express.js", "Socket.io", "Tailwind CSS"],
-      liveUrl: "https://konecto-chat.vercel.app",
-      githubUrl: "https://github.com/AbhiramSuresh/konecto-chat",
+      _id: "proj-client-finance-os",
+      name: "FinanceOS",
+      index: "01",
+      projectType: "client",
+      category: "FINTECH & DASHBOARD",
+      titlePrefix: "Manage Your ",
+      titleGhost: "Finances",
+      namePrefix: "Finance",
+      nameGhost: "OS",
+      desc: "Personal finance management · Budgeting, expenses & financial planning",
+      image: financeDesktop,
+      mobileImage: financeMobile,
+      tech: ["Next.js", "Tailwind CSS", "TypeScript", "Recharts"],
+      liveUrl: "https://finance-os-next-nu.vercel.app/",
       order: 1,
-      image: konectoImage,
     },
     {
       _type: "project",
-      _id: "proj2",
+      _id: "proj-client-scoremate",
       name: "ScoreMate",
-      description: "A comprehensive grading dashboard for students to calculate GPA, CGPA, and grade percentages. Features interactive weight adjustments and target trackers.",
-      category: "react",
-      techStack: ["React.js", "Tailwind CSS", "JavaScript", "LocalStorage"],
-      liveUrl: "https://scoremate-gpa.vercel.app",
-      githubUrl: "https://github.com/AbhiramSuresh/scoremate",
+      index: "02",
+      projectType: "client",
+      category: "PWA & PRODUCTIVITY",
+      titlePrefix: "Calculate Your ",
+      titleGhost: "Scores",
+      namePrefix: "Score",
+      nameGhost: "Mate",
+      desc: "PWA · GPA, CGPA & Percentage Calculator",
+      image: scoremateDesktop,
+      mobileImage: scoremateMobile,
+      tech: ["React.js", "PWA", "Tailwind CSS", "Vite"],
+      liveUrl: "https://github.com/Abhi-raam",
+      githubUrl: "https://github.com/Abhi-raam",
       order: 2,
-      image: scoremateImage,
     },
     {
       _type: "project",
-      _id: "proj3",
-      name: "Dolist",
-      description: "A premium project and task management dashboard designed for tracking sprints. Features interactive drag-and-drop boards, checklist progress, and statistics.",
-      category: "fullstack",
-      techStack: ["React.js", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
-      liveUrl: "https://dolist-tasks.vercel.app",
-      githubUrl: "https://github.com/AbhiramSuresh/dolist-tasks",
+      _id: "proj-client-windsorvale",
+      name: "Windsorvale",
+      index: "03",
+      projectType: "client",
+      category: "HOSPITALITY & RESORT",
+      titlePrefix: "A Resort ",
+      titleGhost: "Experience",
+      namePrefix: "Windsor",
+      nameGhost: "vale",
+      desc: "Resort website · Next.js + Tailwind CSS + Sanity",
+      image: windsorDesktop,
+      mobileImage: windsorMobile,
+      tech: ["Next.js", "Tailwind CSS", "Sanity CMS", "Framer Motion"],
+      liveUrl: "https://windsorvale.vercel.app/",
       order: 3,
-      image: dolistImage,
     },
     {
       _type: "project",
-      _id: "proj4",
-      name: "Learning Portal",
-      description: "An interactive online education and quiz portal. Features student dashboards, lecture uploads, progress rings, and timed, gamified course assessments.",
-      category: "next",
-      techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Firebase Auth", "Firestore"],
-      liveUrl: "https://learning-portal-edu.vercel.app",
-      githubUrl: "https://github.com/AbhiramSuresh/learning-portal",
+      _id: "proj-client-cjems",
+      name: "CJEMS School",
+      index: "04",
+      projectType: "client",
+      category: "EDUCATION & ACADEMICS",
+      titlePrefix: "A Modern ",
+      titleGhost: "School Website",
+      namePrefix: "CJEMS ",
+      nameGhost: "School",
+      desc: "School website · Next.js · Responsive UI",
+      image: cjemsDesktop,
+      mobileImage: cjemsMobile,
+      tech: ["Next.js", "Tailwind CSS", "TypeScript", "Responsive UI"],
+      liveUrl: "https://cjems.vercel.app/",
       order: 4,
-      image: learningImage,
     },
     {
       _type: "project",
-      _id: "proj5",
-      name: "Windsor Vale",
-      description: "A premium corporate marketing website built for Windsor Vale. Integrates a headless CMS for dynamic block creation, with custom page transitions.",
-      category: "next",
-      techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Sanity CMS", "Framer Motion"],
-      liveUrl: "https://windsorvale.com",
+      _id: "proj-client-ifc",
+      name: "Immortals Fitness Club",
+      index: "05",
+      projectType: "client",
+      category: "FITNESS & SPORTS",
+      titlePrefix: "Train. Fight. ",
+      titleGhost: "Transform.",
+      namePrefix: "Immortals ",
+      nameGhost: "Fitness Club",
+      desc: "Gym website · Next.js · Responsive UI",
+      image: ifcDesktop,
+      mobileImage: ifcMobile,
+      tech: ["Next.js", "Tailwind CSS", "React", "Lucide Icons"],
+      liveUrl: "https://ifc-website.vercel.app/",
       order: 5,
-      image: windsorImage,
     },
     {
       _type: "project",
-      _id: "proj6",
-      name: "School Website",
-      description: "An educational institution hub hosting event announcements, campus resources, and news. Features a complete admin portal for updating notifications.",
-      category: "fullstack",
-      techStack: ["Next.js", "React.js", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
-      liveUrl: "https://school-portal-demo.vercel.app",
-      githubUrl: "https://github.com/AbhiramSuresh/school-website",
+      _id: "proj-client-shahul",
+      name: "Shahul Weds Jabeen",
+      index: "06",
+      projectType: "client",
+      category: "WEDDING & EVENT",
+      titlePrefix: "A Beautiful ",
+      titleGhost: "Wedding Invitation",
+      namePrefix: "Shahul Weds ",
+      nameGhost: "Jabeen",
+      desc: "Wedding invitation website · Interactive & responsive experience",
+      image: shahul1,
+      mobileImage: shahul2,
+      tech: ["React", "Tailwind CSS", "Framer Motion", "Vite"],
+      liveUrl: "https://shahul-weds-jabeen.vercel.app/",
       order: 6,
-      image: schoolImage,
+    },
+    // Products category projects
+    {
+      _type: "project",
+      _id: "proj-product-finance-os",
+      name: "FinanceOS",
+      index: "01",
+      projectType: "products",
+      category: "FINTECH & DASHBOARD",
+      titlePrefix: "Manage Your ",
+      titleGhost: "Finances",
+      namePrefix: "Finance",
+      nameGhost: "OS",
+      desc: "Personal finance management · Budgeting, expenses & financial planning",
+      image: financeDesktop,
+      mobileImage: financeMobile,
+      tech: ["Next.js", "Tailwind CSS", "TypeScript", "Recharts"],
+      liveUrl: "https://finance-os-next-nu.vercel.app/",
+      order: 10,
+    },
+    {
+      _type: "project",
+      _id: "proj-product-scoremate",
+      name: "ScoreMate",
+      index: "02",
+      projectType: "products",
+      category: "PWA & PRODUCTIVITY",
+      titlePrefix: "Calculate Your ",
+      titleGhost: "Scores",
+      namePrefix: "Score",
+      nameGhost: "Mate",
+      desc: "PWA · GPA, CGPA & Percentage Calculator",
+      image: scoremateDesktop,
+      mobileImage: scoremateMobile,
+      tech: ["React.js", "PWA", "Tailwind CSS", "Vite"],
+      liveUrl: "https://github.com/Abhi-raam",
+      githubUrl: "https://github.com/Abhi-raam",
+      order: 11,
     },
   ];
 
   for (const proj of projects) {
-    if (!proj.image) {
-      delete proj.image; // Do not seed null image
-    }
     await client.createOrReplace(proj);
   }
-  console.log("✅ Seeding Projects complete.");
+  console.log("✅ Projects seeded.");
 
-  // F. Seed Skills
-  console.log("⚡ Seeding Technical Skills...");
-  const skills = [
-    { _type: "skill", _id: "sk1", name: "React.js", level: 90, category: "frontend", order: 1 },
-    { _type: "skill", _id: "sk2", name: "Next.js", level: 85, category: "frontend", order: 2 },
-    { _type: "skill", _id: "sk3", name: "TypeScript", level: 85, category: "frontend", order: 3 },
-    { _type: "skill", _id: "sk4", name: "JavaScript", level: 90, category: "frontend", order: 4 },
-    { _type: "skill", _id: "sk5", name: "Tailwind CSS", level: 95, category: "frontend", order: 5 },
-    { _type: "skill", _id: "sk6", name: "HTML5 & CSS3", level: 95, category: "frontend", order: 6 },
-    { _type: "skill", _id: "sk7", name: "Node.js", level: 80, category: "backend", order: 7 },
-    { _type: "skill", _id: "sk8", name: "Express.js", level: 80, category: "backend", order: 8 },
-    { _type: "skill", _id: "sk9", name: "MongoDB", level: 75, category: "backend", order: 9 },
-    { _type: "skill", _id: "sk10", name: "Firebase", level: 80, category: "backend", order: 10 },
-    { _type: "skill", _id: "sk11", name: "Git & GitHub", level: 88, category: "tools", order: 11 },
-    { _type: "skill", _id: "sk12", name: "VS Code", level: 92, category: "tools", order: 12 },
-    { _type: "skill", _id: "sk13", name: "Postman", level: 85, category: "tools", order: 13 },
-    { _type: "skill", _id: "sk14", name: "Vercel", level: 90, category: "tools", order: 14 },
+  // E. Seed Services Bento Items
+  console.log("⚡ Seeding Areas of Expertise Services...");
+  const services = [
+    {
+      _type: "service",
+      _id: "serv-frontend",
+      number: "01",
+      category: "FRONTEND",
+      titlePrefix: "FRONTEND ",
+      titleGhost: "DEVELOPMENT",
+      name: "Frontend Development",
+      description: "RESPONSIVE AND USER-CENTRIC WEB INTERFACES BUILT WITH MODERN FRONTEND TECHNOLOGIES, REUSABLE COMPONENTS, AND A STRONG FOCUS ON USABILITY AND MAINTAINABILITY.",
+      chips: [
+        { _key: "c1", label: "REACT.JS", featured: true },
+        { _key: "c2", label: "JAVASCRIPT" },
+        { _key: "c3", label: "TYPESCRIPT" },
+        { _key: "c4", label: "TAILWIND CSS" },
+        { _key: "c5", label: "BOOTSTRAP" },
+      ],
+      layout: "wide",
+      href: "#contact",
+      order: 1,
+    },
+    {
+      _type: "service",
+      _id: "serv-react-next",
+      number: "02",
+      category: "APPLICATIONS",
+      titlePrefix: "REACT & NEXT.JS ",
+      titleGhost: "DEVELOPMENT",
+      name: "React & Next.js Development",
+      description: "MODERN WEB APPLICATIONS DEVELOPED WITH REACT.JS AND NEXT.JS, USING REUSABLE COMPONENTS, STRUCTURED STATE MANAGEMENT, AND RESPONSIVE UI PATTERNS.",
+      chips: [
+        { _key: "c1", label: "REACT.JS", featured: true },
+        { _key: "c2", label: "NEXT.JS" },
+        { _key: "c3", label: "TYPESCRIPT" },
+        { _key: "c4", label: "REUSABLE COMPONENTS" },
+        { _key: "c5", label: "RESPONSIVE UI" },
+      ],
+      layout: "wide",
+      href: "#contact",
+      order: 2,
+    },
+    {
+      _type: "service",
+      _id: "serv-rest-api",
+      number: "03",
+      category: "INTEGRATION",
+      titlePrefix: "REST API ",
+      titleGhost: "INTEGRATION",
+      name: "REST API Integration",
+      description: "DATA-DRIVEN FRONTEND APPLICATIONS CONNECTED TO REST APIS WITH EFFICIENT DATA FETCHING, ERROR HANDLING, AND SMOOTH COLLABORATION WITH BACKEND TEAMS.",
+      chips: [
+        { _key: "c1", label: "REST APIS", featured: true },
+        { _key: "c2", label: "SWR" },
+        { _key: "c3", label: "TANSTACK QUERY" },
+        { _key: "c4", label: "DATA FETCHING" },
+        { _key: "c5", label: "API INTEGRATION" },
+      ],
+      layout: "compact",
+      href: "#contact",
+      order: 3,
+    },
+    {
+      _type: "service",
+      _id: "serv-website",
+      number: "04",
+      category: "RESPONSIVE WEB",
+      titlePrefix: "WEBSITE ",
+      titleGhost: "DEVELOPMENT",
+      name: "Responsive Website Development",
+      description: "MODERN, MOBILE-FIRST WEBSITES FOR BUSINESSES, RESORTS, EDUCATIONAL INSTITUTIONS, FITNESS BRANDS, AND OTHER DIGITAL EXPERIENCES.",
+      chips: [
+        { _key: "c1", label: "NEXT.JS", featured: true },
+        { _key: "c2", label: "TAILWIND CSS" },
+        { _key: "c3", label: "RESPONSIVE DESIGN" },
+        { _key: "c4", label: "CROSS-DEVICE UI" },
+        { _key: "c5", label: "SANITY CMS" },
+      ],
+      layout: "compact",
+      href: "#contact",
+      order: 4,
+    },
+    {
+      _type: "service",
+      _id: "serv-pwa",
+      number: "05",
+      category: "PROGRESSIVE WEB",
+      titlePrefix: "PWA ",
+      titleGhost: "DEVELOPMENT",
+      name: "Progressive Web Apps",
+      description: "INSTALLABLE AND RESPONSIVE WEB APPLICATIONS WITH OFFLINE SUPPORT AND A MOBILE-FIRST EXPERIENCE FOR PRACTICAL EVERYDAY USE CASES.",
+      chips: [
+        { _key: "c1", label: "REACT", featured: true },
+        { _key: "c2", label: "VITE" },
+        { _key: "c3", label: "PWA" },
+        { _key: "c4", label: "OFFLINE SUPPORT" },
+        { _key: "c5", label: "TAILWIND CSS" },
+      ],
+      layout: "compact",
+      href: "#contact",
+      order: 5,
+    },
   ];
 
-  for (const sk of skills) {
-    await client.createOrReplace(sk);
+  for (const serv of services) {
+    await client.createOrReplace(serv);
   }
-  console.log("✅ Seeding Skills complete.");
+  console.log("✅ Services seeded.");
 
-  console.log("\n🎉 Database Seeding successfully completed! All default content has been uploaded to Sanity CMS.");
+  console.log("🎉 All Sanity CMS data and media assets have been seeded successfully!");
 }
 
 seed().catch((err) => {
-  console.error("❌ Seeding failed with unexpected error:", err);
+  console.error("❌ Seeding failed with error:", err);
   process.exit(1);
 });

@@ -1,55 +1,48 @@
 import React from "react";
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ReactLenis } from "@/lib/lenis";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Abhiram Suresh | Software Engineer & Frontend Developer Portfolio",
+  title: "Abhiram — Software Developer & Frontend Engineer",
   description:
-    "Professional portfolio of Abhiram Suresh, a Software Engineer and Frontend Developer specializing in React.js, Next.js, TypeScript, Tailwind CSS, and Progressive Web Apps (PWAs). Explore featured projects, career experience, and technical achievements.",
-  keywords: [
-    "Abhiram Suresh",
-    "Software Engineer",
-    "Frontend Developer",
-    "React Developer",
-    "Next.js Developer",
-    "TypeScript",
-    "Tailwind CSS",
-    "PWA",
-    "Web Developer Portfolio",
-  ],
-  authors: [{ name: "Abhiram Suresh" }],
-  creator: "Abhiram Suresh",
-  robots: {
-    index: true,
-    follow: true,
+    "Portfolio of Abhiram Suresh — Frontend Developer building responsive, user-centric web applications and scalable digital experiences using React.js, Next.js, and TypeScript.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
   },
   openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://abhi-raam.github.io/",
-    title: "Abhiram Suresh | Software Engineer & Frontend Developer",
+    title: "Abhiram. — Software Developer",
     description:
-      "Professional portfolio of Abhiram Suresh, a Software Engineer and Frontend Developer specializing in React.js, Next.js, TypeScript, Tailwind CSS, and Progressive Web Apps (PWAs).",
-    siteName: "Abhiram Suresh Portfolio",
+      "Frontend Developer with 2+ years of experience building responsive, user-centric web applications using React.js, Next.js, and TypeScript.",
+    type: "website",
+    url: "https://abhi-raam.github.io/",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#4f46e5",
+  themeColor: "#0c0c0c",
   width: "device-width",
   initialScale: 1,
 };
@@ -62,10 +55,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${archivo.variable} ${jetbrainsMono.variable} h-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
     >
-      <body className="min-h-full flex flex-col bg-slate-50/20">
-        <ReactLenis root>
+      <body className="min-h-screen bg-[var(--paper)] text-[var(--ink)] font-['Archivo',sans-serif] uppercase antialiased font-normal overflow-x-hidden">
+        <ReactLenis root options={{ lerp: 0.15, duration: 0.7, smoothWheel: true, wheelMultiplier: 1.15 }}>
           {children}
         </ReactLenis>
       </body>

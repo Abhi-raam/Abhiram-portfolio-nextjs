@@ -12,48 +12,64 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "description",
-      title: "Description",
+      name: "index",
+      title: "Index String (e.g. 01, 02)",
+      type: "string",
+    }),
+    defineField({
+      name: "projectType",
+      title: "Project Category / Group",
+      type: "string",
+      options: {
+        list: [
+          { title: "Client Work", value: "client" },
+          { title: "Own / Personal Products", value: "products" },
+        ],
+      },
+      initialValue: "client",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "category",
+      title: "Category Tag (e.g. FINTECH & DASHBOARD)",
+      type: "string",
+    }),
+    defineField({
+      name: "desc",
+      title: "Short Description",
       type: "text",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "image",
-      title: "Thumbnail Image",
+      title: "Primary Desktop Screenshot",
       type: "image",
       options: {
         hotspot: true,
       },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "category",
-      title: "Category",
-      type: "string",
+      name: "mobileImage",
+      title: "Secondary Mobile Screenshot (Optional)",
+      type: "image",
       options: {
-        list: [
-          { title: "Next.js", value: "next" },
-          { title: "React.js", value: "react" },
-          { title: "Full Stack", value: "fullstack" },
-        ],
+        hotspot: true,
       },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "techStack",
-      title: "Tech Stack / Skills Used",
+      name: "tech",
+      title: "Tech Stack Tags",
       type: "array",
       of: [{ type: "string" }],
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "liveUrl",
-      title: "Live Demo URL (Optional)",
+      title: "Live Demo URL",
       type: "url",
     }),
     defineField({
       name: "githubUrl",
-      title: "GitHub URL (Optional)",
+      title: "GitHub URL",
       type: "url",
     }),
     defineField({
