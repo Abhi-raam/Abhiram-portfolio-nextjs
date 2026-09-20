@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { PROJECTS_DATA } from "@/data/siteData";
 
@@ -195,12 +196,12 @@ export function Projects({ projects }: ProjectsProps) {
                         aria-hidden="true"
                       >
                         <div className="w-full aspect-[16/10] relative bg-[#f0f1f3] overflow-hidden">
-                          <img
+                          <Image
                             alt={`${projectTitle} preview`}
-                            loading="lazy"
-                            decoding="async"
                             src={primarySrc}
-                            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-450 ease-[var(--ease)] group-hover:scale-[1.025]"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover object-top transition-transform duration-450 ease-[var(--ease)] group-hover:scale-[1.025]"
                           />
                         </div>
                       </a>
@@ -217,12 +218,12 @@ export function Projects({ projects }: ProjectsProps) {
                       className="absolute right-2.5 bottom-0 w-[clamp(42px,3.8vw,54px)] aspect-[9/18] rounded-t-[10px] border-2 border-white bg-black overflow-hidden shadow-[-3px_-3px_14px_rgba(0,0,0,0.14)] translate-y-1.5 group-hover:translate-y-0 group-hover:shadow-[-4px_-4px_18px_rgba(0,0,0,0.22)] transition-all duration-350 ease-[var(--ease)] z-[2]"
                       aria-hidden="true"
                     >
-                      <img
+                      <Image
                         alt={`${projectTitle} mobile preview`}
-                        loading="lazy"
-                        decoding="async"
                         src={secondarySrc}
-                        className="w-full h-full object-cover object-top"
+                        fill
+                        sizes="60px"
+                        className="object-cover object-top"
                       />
                     </div>
                   )}

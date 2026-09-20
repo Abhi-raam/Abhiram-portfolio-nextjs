@@ -118,7 +118,23 @@ export function ContactFooter({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    let isVisible = true;
     let animId: number;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) {
+          cancelAnimationFrame(animId);
+          animId = requestAnimationFrame(draw);
+        } else {
+          cancelAnimationFrame(animId);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+
     const particles: Array<{
       x: number;
       y: number;
@@ -150,6 +166,7 @@ export function ContactFooter({
     }
 
     const draw = () => {
+      if (!isVisible) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (let i = 0; i < particles.length; i++) {
@@ -190,6 +207,7 @@ export function ContactFooter({
 
     return () => {
       cancelAnimationFrame(animId);
+      observer.disconnect();
       window.removeEventListener("resize", resize);
     };
   }, []);
