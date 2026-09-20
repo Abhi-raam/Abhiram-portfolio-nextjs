@@ -2,7 +2,32 @@
 
 import React from "react";
 import Image from "next/image";
+import { motion, type Variants } from "framer-motion";
 import { HERO_DATA } from "@/data/siteData";
+
+const charVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+  },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: [50, -18, 0],
+    transition: {
+      y: {
+        times: [0, 0.52, 1],
+        duration: 0.8,
+        delay: 0.1 + i * 0.034,
+        ease: ["easeOut", "easeInOut"],
+      },
+      opacity: {
+        duration: 0.35,
+        delay: 0.1 + i * 0.034,
+        ease: "easeOut",
+      },
+    },
+  }),
+};
 
 interface HeroProps {
   name?: string;
@@ -55,6 +80,8 @@ export function Hero({
     return [formatLine(line1Str), formatLine(line2Str)];
   }, [headlineWord1, headlineWord2]);
 
+  let globalCharIndex = 0;
+
   return (
     <section
       className="scene relative flex flex-col items-center pt-[clamp(36px,5vw,76px)] px-[var(--gutter)] pb-12 lg:pb-0 h-auto lg:h-[clamp(660px,71vw,1100px)]"
@@ -69,14 +96,21 @@ export function Hero({
                 <span key={wordIdx}>
                   {wordIdx > 0 && " "}
                   <span className="gw">
-                    {word.map((item, charIdx) => (
-                      <span
-                        key={charIdx}
-                        className={`gl ${item.ghost ? "ghost" : ""}`}
-                      >
-                        {item.char}
-                      </span>
-                    ))}
+                    {word.map((item, charIdx) => {
+                      const idx = globalCharIndex++;
+                      return (
+                        <motion.span
+                          key={charIdx}
+                          custom={idx}
+                          initial="hidden"
+                          animate="visible"
+                          variants={charVariants}
+                          className={`gl ${item.ghost ? "ghost" : ""}`}
+                        >
+                          {item.char}
+                        </motion.span>
+                      );
+                    })}
                   </span>
                 </span>
               ))}

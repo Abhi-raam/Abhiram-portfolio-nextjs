@@ -73,7 +73,7 @@ export function Services({ services, lede = SERVICES_DATA.lede }: ServicesProps)
       {/* Services Bento Container */}
       <div className="flex flex-col gap-5 max-w-[1240px] mx-auto w-full">
         {/* Top Row: 2 Wider Cards */}
-        <div className="flex flex-col md:flex-row gap-5 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full items-stretch">
           {wideCards.map((serv, idx) => (
             <ServiceBentoCard
               key={(serv as any)._id || serv.number || idx}
@@ -86,7 +86,7 @@ export function Services({ services, lede = SERVICES_DATA.lede }: ServicesProps)
 
         {/* Bottom Row: Compact Cards */}
         {compactCards.length > 0 && (
-          <div className="flex flex-col md:flex-row gap-5 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full items-stretch">
             {compactCards.map((serv, idx) => (
               <ServiceBentoCard
                 key={(serv as any)._id || serv.number || idx + 2}
@@ -131,11 +131,7 @@ function ServiceBentoCard({
   return (
     <a
       href={serv.href || "#contact"}
-      className={`group bg-white border border-[#e5e5e5] rounded-[26px] flex flex-col justify-between no-underline text-inherit relative transition-all duration-300 ease-[var(--ease)] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] hover:-translate-y-1 hover:border-[#cfcfcf] hover:shadow-[0_16px_36px_-12px_rgba(0,0,0,0.09)] h-full ${
-        isWide
-          ? "flex-1 min-w-0 md:basis-1/2 p-[clamp(28px,2.8vw,36px)_clamp(24px,2.4vw,32px)] gap-[clamp(18px,2vw,24px)]"
-          : "flex-1 min-w-0 md:basis-1/3 p-[clamp(24px,2.2vw,30px)_clamp(20px,1.8vw,26px)] gap-[clamp(18px,2vw,24px)]"
-      }`}
+      className={`group bg-white border border-[#e5e5e5] rounded-[26px] flex flex-col justify-between no-underline text-inherit relative transition-all duration-300 ease-[var(--ease)] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] hover:-translate-y-1 hover:border-[#cfcfcf] hover:shadow-[0_16px_36px_-12px_rgba(0,0,0,0.09)] w-full h-full p-[clamp(24px,2.4vw,32px)] gap-[clamp(18px,2vw,24px)]`}
       aria-label={`${prefix}${ghost}: ${category}`}
     >
       {/* Top Bar: Pill on left, circular arrow button on right */}
@@ -167,7 +163,7 @@ function ServiceBentoCard({
       </div>
 
       {/* Body: Dual-tone Title + Description */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2.5">
         <h3
           className={`leading-[1.15] tracking-[-0.01em] uppercase m-0 ${
             isWide
@@ -185,7 +181,7 @@ function ServiceBentoCard({
 
       {/* Bottom: Tag Chips */}
       {serv.chips && serv.chips.length > 0 && (
-        <div className="flex flex-wrap gap-[7px] mt-auto pt-1">
+        <div className="flex flex-wrap gap-[7px] mt-1 sm:mt-1.5">
           {serv.chips.map((chip, cIdx) => {
             const label = typeof chip === "string" ? chip : chip.label;
             const isFeatured =
