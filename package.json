@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "node scripts/seed.js",
+    "seed:services": "node scripts/seed-services.js",
     "export": "next export"
   },
   "dependencies": {

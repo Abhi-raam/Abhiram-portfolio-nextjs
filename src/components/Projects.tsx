@@ -1,181 +1,294 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import Image from "next/image";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Layers } from "lucide-react";
-import { Github } from "@/components/BrandIcons";
-import { urlFor } from "@/sanity/lib/image";
+import { PROJECTS_DATA } from "@/data/siteData";
 
-interface Project {
-  name: string;
-  description: string;
-  image: any;
-  techStack: string[];
-  category: "react" | "next" | "fullstack";
+export interface ProjectItem {
+  _id?: string;
+  name?: string;
+  index?: string;
+  projectType?: "client" | "products" | string;
+  category?: string;
+  titlePrefix?: string;
+  titleGhost?: string;
+  namePrefix?: string;
+  nameGhost?: string;
+  title?: string;
+  desc?: string;
+  description?: string;
+  image?: any;
+  mobileImage?: any;
+  shots?: Array<{ src: string; alt?: string }>;
+  tech?: string[];
+  techStack?: string[];
   liveUrl?: string;
+  href?: string;
   githubUrl?: string;
+  github?: string;
 }
 
 interface ProjectsProps {
-  projects?: Project[];
+  projects?: ProjectItem[];
 }
 
-export default function Projects({ projects = [] }: ProjectsProps) {
-  const [activeFilter, setActiveFilter] = useState<"all" | "react" | "next" | "fullstack">("all");
-
-  const filteredProjects = useMemo(() => {
-    return activeFilter === "all"
-      ? projects
-      : projects.filter((p) => p.category === activeFilter);
-  }, [projects, activeFilter]);
-
-  const filters = useMemo(() => [
-    { label: "All Projects", value: "all" },
-    { label: "Next.js", value: "next" },
-    { label: "React.js", value: "react" },
-    { label: "Full Stack", value: "fullstack" },
-  ] as const, []);
-
-  if (!projects || projects.length === 0) return null;
+export function Projects({ projects }: ProjectsProps) {
+  const activeProjects = React.useMemo(() => {
+    if (projects && projects.length > 0) {
+      return projects;
+    }
+    return PROJECTS_DATA.items.client;
+  }, [projects]);
 
   return (
-    <section id="projects" className="py-24 bg-white relative">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        
-        {/* Section Header */}
-        <div className="flex flex-col lg:flex-row md:items-center justify-between gap-6 mb-16">
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 mb-4">
-              Featured Projects
-            </h2>
-            <p className="text-slate-500 font-medium max-w-lg">
-              A curated showcase of my engineering work, spanning frontend applications and robust full-stack systems.
-            </p>
-            <div className="w-12 h-1 bg-indigo-600 rounded-full mt-4" />
-          </div>
+    <section
+      className="scene pt-[clamp(72px,9vw,150px)] px-[var(--gutter)] pb-[clamp(40px,4.5vw,80px)]"
+      id="projects"
+      aria-label="Selected Projects"
+    >
+      <div className="flex items-center justify-between gap-4 mb-[clamp(32px,4vw,64px)]">
+        <h2 className="display display-l" aria-label="FEATURED PROJECT">
+          <span aria-hidden="true">
+            {PROJECTS_DATA.titleLetters.map((word, wIdx) => (
+              <span key={wIdx}>
+                {wIdx > 0 && " "}
+                <span className="gw">
+                  {word.map((item, cIdx) => (
+                    <span
+                      key={cIdx}
+                      className={`gl ${item.ghost ? "ghost" : ""}`}
+                    >
+                      {item.text}
+                    </span>
+                  ))}
+                </span>
+              </span>
+            ))}
+          </span>
+        </h2>
+        <a
+          className="circle-btn circle-btn--ne bg-[var(--paper)] !w-[clamp(52px,5.5vw,76px)] flex-none"
+          href="#contact"
+          aria-label="Start a project"
+          onClick={(e) => e.currentTarget.blur()}
+        >
+          <svg viewBox="0 0 24 24" className="arr" aria-hidden="true">
+            <path d="M4 12h16M15 7l5 5-5 5"></path>
+          </svg>
+        </a>
+      </div>
 
-          {/* Filtering Tabs */}
-          <div className="flex flex-wrap gap-2 p-1.5 bg-slate-100 rounded-2xl border border-slate-200/45 self-center lg:self-end">
-            {filters.map((filter) => {
-              const isActive = activeFilter === filter.value;
-              return (
-                <button
-                  key={filter.value}
-                  onClick={() => setActiveFilter(filter.value)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
-                    isActive
-                      ? "bg-white text-indigo-600 shadow-sm"
-                      : "text-slate-500 hover:text-slate-900"
-                  }`}
-                >
-                  {filter.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[clamp(18px,2vw,28px)] items-stretch max-w-[1440px] mx-auto">
+          {activeProjects.map((proj, idx) => {
+            // Determine shots
+            let primarySrc = "";
+            let secondarySrc = "";
+            const p = proj as any;
+            if (p.shots && p.shots[0]) {
+              primarySrc = p.shots[0].src;
+              secondarySrc = p.shots[1]?.src || "";
+            } else if (typeof p.image === "string") {
+              primarySrc = p.image;
+              secondarySrc = typeof p.mobileImage === "string" ? p.mobileImage : "";
+            } else if (p.image?.asset?.url) {
+              primarySrc = p.image.asset.url;
+              secondarySrc = p.mobileImage?.asset?.url || "";
+            }
 
-        {/* Projects Grid */}
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <AnimatePresence mode="popLayout">
-            {filteredProjects && filteredProjects.map((project) => {
-              // Resolve Image URL: If it is a string (fallback), use it; otherwise build using Sanity builder
-              const imageUrl =
-                project.image && typeof project.image === "object"
-                  ? urlFor(project.image).url()
-                  : project.image || "/placeholder-project.png";
+            const projectTitle =
+              p.name ||
+              p.title ||
+              `Project ${idx + 1}`;
 
-              return (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.4 }}
-                  key={project.name}
-                  className="group flex flex-col h-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50/20 hover:bg-white hover:border-slate-200/80 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300"
-                >
-                  {/* Image Showcase */}
-                  <div className="relative aspect-video w-full bg-slate-100 overflow-hidden border-b border-slate-100">
-                    <Image
-                      src={imageUrl}
-                      alt={project.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-103 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 right-3">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-white/95 backdrop-blur-sm text-slate-800 border border-slate-100 shadow-sm">
-                        <Layers size={10} className="text-indigo-500" />
-                        {project.category === "next"
-                          ? "Next.js"
-                          : project.category === "react"
-                          ? "React"
-                          : "Full Stack"}
+            const targetUrl = p.liveUrl || p.href;
+            const githubUrl = p.githubUrl || p.github;
+            const displayIndex = p.index || String(idx + 1).padStart(2, "0");
+            const tags: string[] = p.tech || p.techStack || [];
+            const shortDesc = p.desc || p.description || "";
+
+            const displayUrl = targetUrl
+              ? targetUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")
+              : githubUrl
+              ? githubUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")
+              : `${projectTitle.toLowerCase().replace(/\s+/g, "")}.app`;
+
+            return (
+              <article
+                key={p._id || p.index || idx}
+                className="group bg-[var(--paper)] border border-[var(--hairline)] rounded-[18px] p-4 sm:p-5 flex flex-col justify-between h-full relative transition-all duration-300 ease-[var(--ease)] shadow-[0_4px_16px_-8px_rgba(0,0,0,0.04)] hover:-translate-y-1 hover:border-[#a3a3a3] hover:shadow-[0_16px_36px_-14px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.03)]"
+              >
+                {/* 1. Header: Meta, Title & Description */}
+                <div className="flex flex-col mb-2.5 sm:mb-3">
+                  <div className="flex justify-between items-center mb-1.5">
+                    {proj.category && (
+                      <span className="tracking-[0.07em] text-[#525252] border border-[var(--hairline)] rounded-full py-0.5 px-2 text-[9px] font-medium bg-black/[0.02]">
+                        {proj.category}
                       </span>
-                    </div>
+                    )}
+                    <span
+                      className="text-[10.5px] text-[var(--muted)] tracking-[0.08em] font-medium ml-auto"
+                      aria-hidden="true"
+                    >
+                      {displayIndex}
+                    </span>
                   </div>
 
-                  {/* Info Content */}
-                  <div className="flex flex-col flex-1 p-6 md:p-8">
-                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">
-                      {project.name}
-                    </h3>
-                    <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                      {project.description}
-                    </p>
+                  <h3 className="text-[clamp(16px,1.2vw,20px)] leading-[1.2] mb-0.5 text-[var(--ink)] font-normal">
+                    <a
+                      href={targetUrl || githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-inherit no-underline transition-opacity duration-200 hover:opacity-75"
+                    >
+                      {projectTitle}
+                    </a>
+                  </h3>
 
-                    {/* Tech stack badges */}
-                    <div className="flex flex-wrap gap-1.5 mb-6">
-                      {project.techStack.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2.5 py-1 text-[11px] font-semibold text-slate-500 bg-slate-100 rounded-md"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
+                  <p className="text-[#5a5a5a] text-[clamp(11px,0.85vw,12.5px)] leading-[1.4] normal-case max-w-[48ch] min-h-[2.8em] flex items-start">
+                    {shortDesc}
+                  </p>
+                </div>
 
-                    {/* Links */}
-                    <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                      {project.liveUrl && (
+                {/* 2. Interactive Device & Browser Preview */}
+                <div className="relative mb-3 rounded-xl overflow-hidden bg-[#eef0f2] border border-[var(--hairline)] shadow-[inset_0_1px_3px_rgba(0,0,0,0.04)]">
+                  <div className="flex flex-col w-full">
+                    <div className="h-6 sm:h-6.5 bg-[#f5f5f7] border-b border-[#e5e5e7] flex items-center justify-between px-2.5 gap-1.5">
+                      <div className="flex items-center gap-1 flex-none" aria-hidden="true">
+                        <span className="w-1.5 h-1.5 rounded-full inline-block bg-[#ff5f56]"></span>
+                        <span className="w-1.5 h-1.5 rounded-full inline-block bg-[#ffbd2e]"></span>
+                        <span className="w-1.5 h-1.5 rounded-full inline-block bg-[#27c93f]"></span>
+                      </div>
+                      <div
+                        className="flex-1 max-w-[180px] mx-auto bg-white border border-[#e2e2e4] rounded-full py-0.5 px-2 text-[8px] text-[#737373] text-center lowercase whitespace-nowrap overflow-hidden text-ellipsis tracking-[0.02em]"
+                        title={targetUrl || githubUrl || displayUrl}
+                      >
+                        {displayUrl}
+                      </div>
+                      {targetUrl || githubUrl ? (
                         <a
-                          href={project.liveUrl}
+                          href={targetUrl || githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-500 transition-colors"
+                          className="w-3.5 h-3.5 flex items-center justify-center text-[#737373] transition-all duration-200 hover:text-[var(--ink)] hover:translate-x-px hover:-translate-y-px"
+                          aria-label={`Open ${projectTitle} in new tab`}
                         >
-                          <ExternalLink size={14} />
-                          Live Demo
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="w-2.5 h-2.5 stroke-current fill-none stroke-[1.8px]"
+                            aria-hidden="true"
+                          >
+                            <path d="M7 17L17 7M7 7h10v10"></path>
+                          </svg>
                         </a>
-                      )}
-
-                      {project.githubUrl && (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={
-                            project.liveUrl
-                              ? "inline-flex items-center justify-center p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
-                              : "flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors text-xs font-semibold"
-                          }
-                          title="GitHub Repository"
-                        >
-                          <Github size={project.liveUrl ? 16 : 14} />
-                          {!project.liveUrl && "GitHub Repository"}
-                        </a>
+                      ) : (
+                        <div className="w-3.5 h-3.5" />
                       )}
                     </div>
+
+                    {primarySrc ? (
+                      <a
+                        href={targetUrl || githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block no-underline cursor-pointer"
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      >
+                        <div className="w-full aspect-[16/10] relative bg-[#f0f1f3] overflow-hidden">
+                          <img
+                            alt={`${projectTitle} preview`}
+                            loading="lazy"
+                            decoding="async"
+                            src={primarySrc}
+                            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-450 ease-[var(--ease)] group-hover:scale-[1.025]"
+                          />
+                        </div>
+                      </a>
+                    ) : (
+                      <div className="w-full aspect-[16/10] bg-[#e2e2e4] flex items-center justify-center text-[#888] text-xs">
+                        No Preview Available
+                      </div>
+                    )}
                   </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </motion.div>
+
+                  {/* Secondary mobile view preview if available */}
+                  {secondarySrc && (
+                    <div
+                      className="absolute right-2.5 bottom-0 w-[clamp(42px,3.8vw,54px)] aspect-[9/18] rounded-t-[10px] border-2 border-white bg-black overflow-hidden shadow-[-3px_-3px_14px_rgba(0,0,0,0.14)] translate-y-1.5 group-hover:translate-y-0 group-hover:shadow-[-4px_-4px_18px_rgba(0,0,0,0.22)] transition-all duration-350 ease-[var(--ease)] z-[2]"
+                      aria-hidden="true"
+                    >
+                      <img
+                        alt={`${projectTitle} mobile preview`}
+                        loading="lazy"
+                        decoding="async"
+                        src={secondarySrc}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* 3. Tech Stack Chips */}
+                {tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mb-2.5" aria-label="Technologies used">
+                    {tags.map((tag: string) => (
+                      <span
+                        key={tag}
+                        className="text-[#404040] bg-black/[0.035] border border-black/[0.07] rounded-full py-0.5 px-2 text-[9px] tracking-[0.05em] font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* 4. Action Controls: Live Demo & GitHub */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-auto pt-1">
+                  {targetUrl && (
+                    <a
+                      href={targetUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group/btn h-9 sm:h-[38px] px-4 text-[10.5px] tracking-[0.06em] inline-flex items-center justify-center gap-1.5 font-medium rounded-full no-underline transition-all duration-250 ease-[var(--ease)] bg-[var(--ink-black)] text-white border border-[var(--ink-black)] hover:bg-transparent hover:text-[var(--ink)] w-full sm:w-auto"
+                    >
+                      <span>LIVE DEMO</span>
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="stroke-current fill-none stroke-[1.8px] transition-transform duration-250 ease-[var(--ease)] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
+                        width="13"
+                        height="13"
+                        aria-hidden="true"
+                      >
+                        <path d="M7 17L17 7M7 7h10v10"></path>
+                      </svg>
+                    </a>
+                  )}
+
+                  {githubUrl && (
+                    <a
+                      href={githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="h-9 sm:h-[38px] px-4 text-[10.5px] tracking-[0.06em] inline-flex items-center justify-center gap-1.5 font-medium rounded-full no-underline transition-all duration-250 ease-[var(--ease)] bg-transparent text-[var(--ink)] border border-[var(--hairline)] hover:bg-black/[0.05] hover:border-[var(--ink)] w-full sm:w-auto"
+                      aria-label={`View ${projectTitle} on GitHub`}
+                    >
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                        />
+                      </svg>
+                      <span>GITHUB</span>
+                    </a>
+                  )}
+                </div>
+              </article>
+            );
+          })}
       </div>
     </section>
   );
 }
+
+export default Projects;

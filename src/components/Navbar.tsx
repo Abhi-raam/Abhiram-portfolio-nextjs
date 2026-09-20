@@ -1,161 +1,191 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import React, { useState } from "react";
+import { NAVBAR_DATA } from "@/data/siteData";
 
-interface NavItem {
-  label: string;
-  href: string;
+interface NavbarProps {
+  name?: string;
+  wordmarkGhost?: string;
+  wordmarkRest?: string;
+  githubUrl?: string;
+  linkedinUrl?: string;
+  email?: string;
 }
 
-const navItems: NavItem[] = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
-];
+export function Navbar({
+  name,
+  wordmarkGhost,
+  wordmarkRest,
+  githubUrl,
+  linkedinUrl,
+  email,
+}: NavbarProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
 
-export default function Navbar({ name }: { name?: string }) {
-  const [activeSection, setActiveSection] = useState("home");
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  // Compute wordmark from custom props or fallback to name/siteData
+  let ghostLetter = wordmarkGhost || NAVBAR_DATA.wordmark.ghostLetter;
+  let restOfName = wordmarkRest || NAVBAR_DATA.wordmark.restOfName;
+  if (!wordmarkGhost && !wordmarkRest && name && name.length > 0) {
+    ghostLetter = name[0];
+    const firstName = name.split(" ")[0];
+    restOfName = firstName.slice(1) + ".";
+  }
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Social links fallback with sanity props
+  const socials = [
+    {
+      label: "GitHub",
+      glyph: "GH",
+      href: githubUrl || "https://github.com/Abhi-raam",
+    },
+    {
+      label: "LinkedIn",
+      glyph: "in",
+      href: linkedinUrl || "https://www.linkedin.com/in/abhiram-suresh",
+    },
+    {
+      label: "Contact",
+      href: email ? `mailto:${email}` : "#contact",
+      isEmailIcon: true,
+    },
+  ];
 
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "-20% 0px -60% 0px",
-      threshold: 0,
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    navItems.forEach((item) => {
-      const el = document.querySelector(item.href);
-      if (el) observer.observe(el);
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  if (!name) return null;
-
-  const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const el = document.querySelector(href);
-    if (el) {
-      setIsMobileMenuOpen(false);
-      const yOffset = -80; // height of fixed navbar
-      const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-      setActiveSection(href.substring(1));
+  const toggleMenu = (open: boolean) => {
+    setMenuOpen(open);
+    if (typeof document !== "undefined") {
+      if (open) {
+        document.body.classList.add("menu-open");
+      } else {
+        document.body.classList.remove("menu-open");
+      }
     }
   };
 
   return (
-    <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
-          ? "glass-nav shadow-sm py-4"
-          : "bg-transparent py-6"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-        {/* Logo */}
-        <a
-          href="#home"
-          onClick={(e) => handleNavClick(e, "#home")}
-          className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2 group"
-        >
-          <span className="h-9 w-9 rounded-xl bg-linear-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-extrabold shadow-sm shadow-indigo-200 group-hover:scale-105 transition-transform duration-200">
-            {initials}
-          </span>
-          <span className="bg-linear-to-tr from-slate-900 via-slate-800 to-indigo-950 bg-clip-text text-transparent">
-            {name}
-          </span>
-        </a>
+    <>
+      <a
+        className="skip absolute -top-[60px] focus:top-6 left-6 z-[99] bg-[var(--ink-black)] text-white rounded-full tracking-[0.08em] py-3 px-6 text-[11px] transition-[top] duration-300 ease-[var(--ease)]"
+        href="#main"
+      >
+        Skip to content
+      </a>
 
-        {/* Desktop Nav Items */}
-        <nav className="hidden lg:flex items-center gap-1">
-          {navItems.map((item) => {
-            const isActive = activeSection === item.href.substring(1);
-            return (
+      <header
+        className="flex items-center justify-between gap-6 py-6 px-[var(--gutter)]"
+        id="home"
+      >
+        <div className="flex items-center gap-[clamp(20px,4vw,56px)]">
+          <a
+            className="tracking-[0.04em] text-[17px] font-medium text-[var(--ink)] no-underline"
+            href="#home"
+          >
+            <span className="ghost">{ghostLetter}</span>
+            {restOfName}
+          </a>
+          <nav className="hidden lg:flex items-center gap-2" aria-label="Primary">
+            {NAVBAR_DATA.links.map((link) => (
               <a
-                key={item.label}
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 relative ${
-                  isActive
-                    ? "text-indigo-600 bg-indigo-50/50"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                }`}
+                key={link.href}
+                className="pill tracking-[0.08em] h-[34px] px-[22px] text-[11px] no-underline"
+                href={link.href}
               >
-                {item.label}
+                {link.label}
               </a>
-            );
-          })}
-        </nav>
-
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="lg:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Drawer */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-white border-b border-slate-100 shadow-lg animate-fadeIn">
-          <nav className="flex flex-col py-4 px-6 gap-2">
-            {navItems.map((item) => {
-              const isActive = activeSection === item.href.substring(1);
-              return (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  className={`px-4 py-3 rounded-xl text-base font-medium transition-colors ${
-                    isActive
-                      ? "text-indigo-600 bg-indigo-50"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                  }`}
-                >
-                  {item.label}
-                </a>
-              );
-            })}
+            ))}
           </nav>
         </div>
+
+        <div className="flex items-center gap-2">
+          {socials.map((soc) =>
+            soc.isEmailIcon ? (
+              <a
+                key={soc.label}
+                className="hidden sm:grid w-[42px] h-[42px] aspect-square rounded-full border border-[var(--hairline)] place-items-center transition-colors duration-200 hover:bg-[var(--ink-black)] hover:border-[var(--ink-black)] hover:text-white"
+                href={soc.href}
+                aria-label={soc.label}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-[42%] h-[42%] stroke-current fill-none stroke-[1.3px]"
+                  aria-hidden="true"
+                >
+                  <rect x="3.6" y="5.6" width="16.8" height="12.8" rx="2.6"></rect>
+                  <path d="M4.4 7.4l7.6 5.8 7.6-5.8"></path>
+                </svg>
+              </a>
+            ) : (
+              <a
+                key={soc.label}
+                className="hidden sm:grid w-[42px] h-[42px] aspect-square rounded-full border border-[var(--hairline)] place-items-center transition-colors duration-200 hover:bg-[var(--ink-black)] hover:border-[var(--ink-black)] hover:text-white"
+                href={soc.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={soc.label}
+              >
+                <span
+                  className="text-[11px] font-medium leading-none select-none"
+                  aria-hidden="true"
+                >
+                  {soc.glyph}
+                </span>
+              </a>
+            )
+          )}
+          <button
+            className="flex lg:hidden w-[42px] h-[42px] aspect-square rounded-full border border-[var(--hairline)] flex-col items-center justify-center transition-colors duration-200 hover:bg-[var(--ink-black)] hover:border-[var(--ink-black)] hover:text-white"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="menu"
+            onClick={() => toggleMenu(!menuOpen)}
+          >
+            <span
+              className="block w-4 h-[1.5px] my-[2.5px] bg-current rounded-[1px]"
+              aria-hidden="true"
+            ></span>
+            <span
+              className="block w-4 h-[1.5px] my-[2.5px] bg-current rounded-[1px]"
+              aria-hidden="true"
+            ></span>
+            <span
+              className="block w-4 h-[1.5px] my-[2.5px] bg-current rounded-[1px]"
+              aria-hidden="true"
+            ></span>
+          </button>
+        </div>
+      </header>
+
+      {/* Fullscreen Mobile Menu Overlay */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-[60] bg-[var(--ink-black)] text-white flex flex-col justify-center items-center gap-[18px]"
+          id="menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site menu"
+        >
+          <button
+            className="circle-btn menu-close absolute top-7 right-7 w-12 border-[var(--hairline-dark)] text-white"
+            aria-label="Close menu"
+            onClick={() => toggleMenu(false)}
+          >
+            <svg viewBox="0 0 24 24" className="arr" aria-hidden="true">
+              <path d="M6 6l12 12M6 18L18 6"></path>
+            </svg>
+          </button>
+          {NAVBAR_DATA.links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => toggleMenu(false)}
+              className="tracking-[0.02em] rounded-[var(--radius-pill)] border border-transparent py-1.5 px-[34px] text-[clamp(28px,6vw,52px)] transition-colors hover:border-[var(--hairline-dark)]"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
       )}
-    </header>
+    </>
   );
 }
+
+export default Navbar;
