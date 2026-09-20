@@ -77,7 +77,19 @@ button {
 }
 
 .display-xl {
-  font-size: clamp(56px, 11.6vw, 190px);
+  font-size: clamp(28px, 8.4vw, 48px);
+}
+
+@media (min-width: 640px) {
+  .display-xl {
+    font-size: clamp(48px, 10.2vw, 110px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .display-xl {
+    font-size: clamp(100px, 11.6vw, 190px);
+  }
 }
 
 .display-l {

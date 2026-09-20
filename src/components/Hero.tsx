@@ -87,7 +87,7 @@ export function Hero({
       className="scene relative flex flex-col items-center pt-[clamp(36px,5vw,76px)] px-[var(--gutter)] pb-12 lg:pb-0 h-auto lg:h-[clamp(660px,71vw,1100px)]"
       aria-label="Intro"
     >
-      <h1 className="relative z-[2] text-center display display-xl" aria-label={HERO_DATA.ariaLabel}>
+      <h1 className="relative z-[10] text-center display text-[clamp(38px,8.2vw,50px)] sm:text-[clamp(50px,10.2vw,110px)] lg:text-[clamp(100px,11.6vw,190px)]" aria-label={HERO_DATA.ariaLabel}>
         <span aria-hidden="true">
           {displayHeadline.map((line, lineIdx) => (
             <span key={lineIdx}>
@@ -120,7 +120,7 @@ export function Hero({
       </h1>
 
       <figure
-        className="pointer-events-none z-[3] relative lg:absolute inset-x-0 bottom-auto lg:bottom-0 mx-auto w-[min(72vw,400px)] lg:w-[clamp(310px,40vw,600px)] -mt-[12vw] lg:mt-0 mb-2 lg:mb-0 [mask-image:linear-gradient(to_right,transparent_0%,black_10%,black_90%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_10%,black_90%,transparent_100%)]"
+        className="pointer-events-none z-[2] relative lg:absolute inset-x-0 bottom-auto lg:bottom-0 mx-auto w-[min(72vw,400px)] lg:w-[clamp(310px,40vw,600px)] mt-3 sm:mt-5 lg:mt-0 lg:translate-y-[clamp(18px,2.2vw,36px)] mb-2 lg:mb-0 [mask-image:linear-gradient(to_right,transparent_0%,black_10%,black_90%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_10%,black_90%,transparent_100%)]"
         aria-hidden="true"
       >
         <div className="portrait-img relative w-full aspect-[4/5] [mask-image:linear-gradient(to_bottom,black_58%,transparent_82%)] [-webkit-mask-image:linear-gradient(to_bottom,black_58%,transparent_82%)]">
