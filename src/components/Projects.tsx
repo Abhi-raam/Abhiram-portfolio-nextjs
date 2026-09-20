@@ -200,6 +200,7 @@ export function Projects({ projects }: ProjectsProps) {
                             alt={`${projectTitle} preview`}
                             src={primarySrc}
                             fill
+                            unoptimized
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover object-top transition-transform duration-450 ease-[var(--ease)] group-hover:scale-[1.025]"
                           />
@@ -222,6 +223,7 @@ export function Projects({ projects }: ProjectsProps) {
                         alt={`${projectTitle} mobile preview`}
                         src={secondarySrc}
                         fill
+                        unoptimized
                         sizes="60px"
                         className="object-cover object-top"
                       />
