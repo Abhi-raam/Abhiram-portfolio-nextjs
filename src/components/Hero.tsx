@@ -87,7 +87,7 @@ export function Hero({
       className="scene relative flex flex-col items-center pt-[clamp(36px,5vw,76px)] px-[var(--gutter)] pb-12 lg:pb-0 h-auto lg:h-[clamp(660px,71vw,1100px)]"
       aria-label="Intro"
     >
-      <h1 className="relative z-[10] text-center display text-[clamp(38px,8.2vw,50px)] sm:text-[clamp(50px,10.2vw,110px)] lg:text-[clamp(100px,11.6vw,190px)]" aria-label={HERO_DATA.ariaLabel}>
+      <h1 className="relative z-[10] text-center display text-[clamp(46px,10vw,58px)] sm:text-[clamp(50px,10.2vw,110px)] lg:text-[clamp(100px,11.6vw,190px)]" aria-label={HERO_DATA.ariaLabel}>
         <span aria-hidden="true">
           {displayHeadline.map((line, lineIdx) => (
             <span key={lineIdx}>
